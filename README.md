@@ -1,14 +1,13 @@
 # CALCD
-Grub4dos script with extensions to grub4dos' function calc
+Grub4dos script with extensions to grub4dos' function calc\n
 
-CALCD.G4B v.0.1.20 (20220924), by deomsh (first public version)
+CALCD.G4B v.0.1.20 (20220924), by deomsh (first public version)\n
 
-Help: CALCD.G4B v.0.1.20 (20220924), by deomsh
-Output: Echood, if exists always in variables 'result' 'rounded' and 'message'
-Functions: SUM, PRODUCT, COUNT, FAC, MEAN, SQRT, INV, VARP, VARS, STDEVP, STDEVS, "==", ">=", "<=", Pnr, Cnr, CRT
- Use: CALCD.G4B <function> <number1> [<number2> ...]|<number1> <number2>
-Operators:  +  ,  -  ,  *  ,  /  , ^ . Special: ROUND , DECI , DIGI , FIX
- Use: CALCD.G4B <number1> <operator> <number2> [<operator> <number3> ...]
+Output: Echood, if exists always in variables 'result' 'rounded' and 'message'\n
+Functions: SUM, PRODUCT, COUNT, FAC, MEAN, SQRT, INV, VARP, VARS, STDEVP, STDEVS, "==", ">=", "<=", Pnr, Cnr, CRT\n
+ Use: CALCD.G4B <function> <number1> [<number2> ...]|<number1> <number2>\n
+Operators:  +  ,  -  ,  *  ,  /  , ^ . Special: ROUND , DECI , DIGI , FIX\n
+ Use: CALCD.G4B <number1> <operator> <number2> [<operator> <number3> ...]\n
 Quasi-operators: SQRT and INV if used after result/ number
  Use: CALCD.G4B <number1> <SQRT|INV>
 Memory: MC , M , M+ , M- , MR , RM
