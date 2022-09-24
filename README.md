@@ -32,7 +32,7 @@ Remark: Arguments are space-separated, without '<' and '>', '[..]' is optional.
  Error-messages are echood, while 'result' and 'rounded' are deleted.
  Input of hexa-decimal integers allowed. Decimals: decimal numbers only.
  New function/ calculation after '\\'.
- Names and switches are case-insensitive.
+ Names and switches are not case-sensitive.
 
 Example CALCD.G4B  help +
 
