@@ -7,21 +7,21 @@ Output: Echood, if exists always in variables 'result' 'rounded' and 'message'
 
 Functions: SUM, PRODUCT, COUNT, FAC, MEAN, SQRT, INV, VARP, VARS, STDEVP, STDEVS, "==", ">=", "<=", Pnr, Cnr, CRT
  
-Use: CALCD.G4B function number1 [number2 ...]|number1 number2
+Use: CALCD.G4B  function  number1  [number2  ...]|number1  number2
 
 Operators:  +  ,  -  ,  *  ,  /  , ^ . Special: ROUND , DECI , DIGI , FIX
 
-Use: CALCD.G4B number1 operator number2 [operator number3 ...]
+Use: CALCD.G4B  number1  operator  number2  [operator  number3 ...]
 
 Quasi-operators: SQRT and INV if used after result/ number
 
-Use: CALCD.G4B number1 SQRT|INV
+Use: CALCD.G4B  number1  SQRT|INV
 
 Memory: MC , M , M+ , M- , MR , RM
 
 Help: Function-/ operator-/ memory-/ syntaxis-specific
 
-Use: CALCD.G4B help function|operator|mem|syntax
+Use: CALCD.G4B  help  function|operator|mem|syntax
 
 Remark: Arguments are space-separated, without '<' and '>', '[..]' is optional
  Switches: /echo or /echoM or /echoR or /V (debug msg=3). Before argument
@@ -33,6 +33,8 @@ Remark: Arguments are space-separated, without '<' and '>', '[..]' is optional
  Input of hexa-decimal integers allowed. Decimals: decimal numbers only
  New function/ calculation after '\\'
  Names and switches are case-insensitive
+
+Example CALCD.G4B  help +
 
 Example CALCD.G4B 38 + 2.5 - 27.315 * 1.2895 / 3.1239 ^ 3 SQRT - 1 ROUND 4
 
