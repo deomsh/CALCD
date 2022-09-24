@@ -815,7 +815,7 @@ setlocal && set * && set rounded=%rounded% && set MR=%MR% && set lastrnd=%lastrn
 if %~1==goback && set goback=Y
 if "%~3"=="" && endlocal && set "message=Abort: argument 'number' is missing" &; if %goback%==Y && goto :eof ! goto :calcfpend
 shift
-if %~1==md &; if %~d2==(md) && set md=%~2 && shift && shift ! if %goback%==Y && endlocal && set "message=Abort: (md)-device in '%~2' not found" && set result= && goto :eof ! endlocal && set "message=Abort: (md)-device in '%~2' not found" && goto :calcfpend
+if /i %~1==md &; if %~d2==(md) && set md=%~2 && shift && shift ! if %goback%==Y && endlocal && set "message=Abort: (md)-device in '%~2' not found" && set result= && goto :eof ! endlocal && set "message=Abort: (md)-device in '%~2' not found" && goto :calcfpend
 if exist md &; call Fn.11 "%md%" "+" |; if %goback%==Y && endlocal && set "message=Abort: (md)-device in '%md%' not valid" && set result= && goto :eof ! endlocal && set "message=Abort: (md)-device in '%md%' not valid" && goto :calcfpend
 if exist md && if %md:~-3,3%>=256 &; if %goback%==Y && endlocal && set "message=Abort: sectors of (md)-device in '%md%' above 255" && set result= && goto :eof ! endlocal && set "message=Abort: sectors of (md)-device in '%md%' above 255" && goto :calcfpend
 if not exist md && set N1=%~1 &; if /i %N1:~-2,2%==mr && set N1=%N1:~0,-2%%%MR% && set lastrnd=%memrnd% ! if /i %N1%==r && set N1=%R% ! if /i %N1%==-r && set N1=-%R%
@@ -844,7 +844,7 @@ setlocal && set *
 if %~1==goback && set goback=Y
 if "%~2"=="" && endlocal && set "message=Abort: argument missing" &; if %goback%==Y && goto :eof ! goto :calcfpend
 shift
-if %~1==md &; if %~d2==(md) && set md=%~2 && shift && shift ! if %goback%==Y && endlocal && set "message=Abort: (md)-device in '%~2' not found" && goto :eof ! endlocal && set "message=Abort: (md)-device in '%~2' not found" && goto :calcfpend
+if /i %~1==md &; if %~d2==(md) && set md=%~2 && shift && shift ! if %goback%==Y && endlocal && set "message=Abort: (md)-device in '%~2' not found" && goto :eof ! endlocal && set "message=Abort: (md)-device in '%~2' not found" && goto :calcfpend
 if exist md &; call Fn.11 "%md%" "+" |; if %goback%==Y && endlocal && set "message=Abort: (md)-device in '%md%' not valid" && goto :eof ! endlocal && set "message=Abort: (md)-device in '%md%' not valid" && goto :calcfpend
 if exist md && if %md:~-3,3%>=256 &; if %goback%==Y && endlocal && set "message=Abort: sectors of (md)-device in '%md%' above 255" && goto :eof ! endlocal && set "message=Abort: sectors of (md)-device in '%md%' above 255" && goto :calcfpend
 set count=0
@@ -869,7 +869,7 @@ setlocal && set * && set rounded=%rounded% && set MR=%MR% && set lastrnd=%lastrn
 if %~1==goback && set goback=Y
 if "%~3"=="" && endlocal && set "message=Abort: argument 'number' is missing" &; if %goback%==Y && goto :eof ! goto :calcfpend
 shift
-if %~1==md &; if %~d2==(md) && set md=%~2 && shift && shift ! if %goback%==Y && endlocal && set "message=Abort: (md)-device in '%~2' not found" && set result= && goto :eof ! endlocal && set "message=Abort: (md)-device in '%~2' not found" && set result= && goto :calcfpend
+if /i %~1==md &; if %~d2==(md) && set md=%~2 && shift && shift ! if %goback%==Y && endlocal && set "message=Abort: (md)-device in '%~2' not found" && set result= && goto :eof ! endlocal && set "message=Abort: (md)-device in '%~2' not found" && set result= && goto :calcfpend
 if not exist md && set N1=%~1 &; if /i %N1:~-2,2%==mr && set N1=%N1:~0,-2%%%MR% && set lastrnd=%memrnd% ! if /i %N1%==r && set N1=%R% ! if /i %N1%==-r && set N1=-%R%
 if not exist md && set N2=%~2 &; if /i %N2:~-2,2%==mr && set N2=%N2:~0,-2%%%MR% && set lastrnd=%memrnd% ! if /i %N2%==r && set N2=%R% ! if /i %N2%==-r && set N2=-%R%
 if not exist md && set count=1 && call :+ + %N1% %N2% &; if exist result && set /a count=%count%+1 && shift && shift && goto :meanloop ! endlocal && set "message=%message%" && set result= && goto :eof
@@ -896,7 +896,7 @@ setlocal && set * && set rounded=%rounded% && set MR=%MR% && set lastrnd=%lastrn
 if %~1==goback && set goback=Y
 if "%~3"=="" && endlocal && set "message=Abort: argument 'number' is missing" &; if %goback%==Y && goto :eof ! goto :calcfpend
 shift
-if %~1==md &; if %~d2==(md) && set md=%~2 && shift && shift ! if %goback%==Y && endlocal && set "message=Abort: (md)-device in '%~2' not found" && set result= && goto :eof ! endlocal && set "message=Abort: (md)-device in '%~2' not found" && set result= && goto :calcfpend
+if /i %~1==md &; if %~d2==(md) && set md=%~2 && shift && shift ! if %goback%==Y && endlocal && set "message=Abort: (md)-device in '%~2' not found" && set result= && goto :eof ! endlocal && set "message=Abort: (md)-device in '%~2' not found" && set result= && goto :calcfpend
 if exist md &; call Fn.11 "%md%" "+" |; if %goback%==Y && endlocal && set "message=Abort: (md)-device in '%md%' not valid" && set result= && goto :eof ! endlocal && set "message=Abort: (md)-device in '%md%' not valid" && set result= && goto :calcfpend
 if exist md && if %md:~-3,3%>=256 &; if %goback%==Y && endlocal && set "message=Abort: sectors of (md)-device in '%md%' above 255" && set result= && goto :eof ! endlocal && set "message=Abort: sectors of (md)-device in '%md%' above 255" && set result= && goto :calcfpend
 if not exist md && set N1=%~1 &; if /i %N1:~-2,2%==mr && set N1=%N1:~0,-2%%%MR% && set lastrnd=%memrnd% ! if /i %N1%==r && set N1=%R% ! if /i %N1%==-r && set N1=-%R%
@@ -987,7 +987,7 @@ shift
 goto :variation
 
 :variation
-if %~1==md &; if %~d2==(md) && set md=%~2 && shift && shift ! endlocal && set "message=Abort: (md)-device in '%~2' not found" && set result= && goto :calcfpend
+if /i %~1==md &; if %~d2==(md) && set md=%~2 && shift && shift ! endlocal && set "message=Abort: (md)-device in '%~2' not found" && set result= && goto :calcfpend
 if exist md && call Fn.11 "%md%" "+" || endlocal && set "message=Abort: (md)-device in '%md%' not valid" && set result= && goto :calcfpend
 if exist md && if %md:~-3,3%>=256 &; endlocal && set "message=Abort: sectors of (md)-device in '%md%' above 255" && set result= && goto :calcfpend
 set sum=0 && set count=0
