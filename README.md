@@ -23,16 +23,16 @@ Help: Function-/ operator-/ memory-/ syntaxis-specific
 
 Use: CALCD.G4B  help  function|operator|mem|syntax
 
-Remark: Arguments are space-separated, without '<' and '>', '[..]' is optional
- Switches: /echo or /echoM or /echoR or /V (debug msg=3). Before argument
- Order of calculation: from left to right. NO brackets allowed
- Highest supported result: 9223372036854775807, about 19 integer digits + 18 decimals
- Highest input depends on function/ operator: see Help
- Lowest number: 0.0000000000000000001 (decimals: dot, no comma allowed)
- Error-messages are echood, while 'result' and 'rounded' are deleted
- Input of hexa-decimal integers allowed. Decimals: decimal numbers only
- New function/ calculation after '\\'
- Names and switches are case-insensitive
+Remark: Arguments are space-separated, without '<' and '>', '[..]' is optional.
+ Switches before argument: /echo or /echoM or /echoR or /V (debug msg=3).
+ Order of calculation: from left to right. NO brackets allowed.
+ Highest supported result: 9223372036854775807, about 19 integer digits + 18 decimals.
+ Highest input depends on function/ operator: see Help.
+ Lowest number: 0.0000000000000000001 (decimals: dot, no comma allowed).
+ Error-messages are echood, while 'result' and 'rounded' are deleted.
+ Input of hexa-decimal integers allowed. Decimals: decimal numbers only.
+ New function/ calculation after '\\'.
+ Names and switches are case-insensitive.
 
 Example CALCD.G4B  help +
 
