@@ -7,7 +7,7 @@ Output: Echood, if exists always in variables 'result' 'rounded' and 'message'
 
 Functions: SUM, PRODUCT, COUNT, FAC, MEAN, SQRT, INV, VARP, VARS, STDEVP, STDEVS, "==", ">=", "<=", Pnr, Cnr, CRT
  
-Use: CALCD.G4B <function> <number1> [<number2> ...]|<number1> <number2>
+Use: CALCD.G4B <<function>> <<number1>> [<<number2>> ...]|<<number1>> <<number2>>
 
 Operators:  +  ,  -  ,  *  ,  /  , ^ . Special: ROUND , DECI , DIGI , FIX
 
