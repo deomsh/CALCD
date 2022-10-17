@@ -1,7 +1,7 @@
 # CALCD
 Grub4dos script with extensions to grub4dos' function calc
 
-CALCD.G4B v.2.0 (20221018), by deomsh
+CALCD.G4B v2.0 (20221018), by deomsh
 
 Output  Echood, if exists in variables 'result' 'MR' 'R' 'resrnd' and 'message'
 Prefix  Functions: SUM PRODUCT MEAN VARP VARS STDEVP STDEVS FACT Pnr Cnr "==" ">=" "<=" COUNT
