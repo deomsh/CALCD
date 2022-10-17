@@ -26,7 +26,7 @@ Function FAC renamed to FACT
 Simpler handling of multiple calculations on command-line:
 - Continue/ restart calculation with \\ only needed after COUNT
 - Functions INV, SQRT and M cannot be used before there argument anymore
-- Function CBRT must now used after argument
+- Function CBRT must now be used after argument
 - Single number on command-line allowed (including MR, R and 0!-20!)
 Help has been rewritten, about 240 examples
 New funtions:
