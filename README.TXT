@@ -11,7 +11,7 @@ Use     CALCD.G4B [switch] number1 operator|function number2|NUMBER
 Postfix Functions: INV SQRT SQ CBRT CB HEX THSEP
 Use     CALCD.G4B [switch] number function
 Memory  Functions: M M+ M- RM  Clear: MC  Placeholders for number: MR R
-Number  ± 10exp-18 - 2exp63-1, 0!-20!, MR, R (integers hex too, decimals: dot)
+Numbers ± 10exp-18 - 2exp63-1, 0!-20!, MR, R (integers hex too, decimals: dot)
 Help    CALCD.G4B help|--help|/? [function|operator|mem|ver]
 
 BTW After Aborting errors text above is showed always - if you do not like it (anymore) use remarked line 89 instead of line 88
