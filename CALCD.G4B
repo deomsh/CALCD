@@ -1,5 +1,5 @@
 !BAT
-#-#+ CALCD.G4B v.0.2 (20221018), by deomsh
+#-#+ CALCD.G4B v2.0 (20221018), by deomsh
 if "%~1"=="" && echo CALCD.G4B v2.0 && goto :smallhelp
 if "%~1"=="/?" && goto :help
 if "%~1"=="--help" && goto :help
