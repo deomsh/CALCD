@@ -14,4 +14,27 @@ Memory  Functions: M M+ M- RM  Clear: MC  Placeholders for number: MR R
         ± 10exp-18 - 2exp63-1, 0!-20!, MR, R (integers hex too, decimals: dot)
 Help    CALCD.G4B help|--help|/? [function|operator|mem|ver]
 
-BTW After Aborting errors text above is showed always - if you do not like it (anymore) use line 89 instead of remaked line 88
+BTW After Aborting errors text above is showed always - if you do not like it (anymore) use remarked line 89 instead of line 88
+
+History:
+
+v2.0
+Bugfixes (especially in Cubic Root)
+Cubic Root (CBRT) gives 18 decimals now (but not rounded)
+Function CRT renamed to CBRT
+Function FAC renamed to FACT
+Simpler handling of multiple calculations on command-line:
+- Restart calculation with \\ only needed after COUNT
+- Functions INV, SQRT and M cannot be used before there argument anymore
+- Function CBRT must now used after argument
+- Single number on command-line allowed (including MR, R and 0!-20!)
+Help has been rewritten, about 240 examples
+New funtions:
+HEX: convert number/ result to hexa-decimal number
+THSEP: adds thousands-comma-separator to last number/ result (input with thousands-comma's allowed too)
+SQ: Square of number
+CB: Cubic of number
+New switch: /Q for quiet operation
+
+v0.1.21
+First published version
