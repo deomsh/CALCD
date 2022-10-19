@@ -1510,23 +1510,18 @@ if not "%~2"=="" && goto :help%~2
 echo -e Help\tCALCD.G4B v0.2 (20221020), by deomsh
 echo -e Output\tResult echood and if exists in variables result R MR lastrnd or message
 echo -e Prefix\tFunctions: SUM  PRODUCT  MEAN  VARP  VARS  STDEVP  STDEVS  FACT  Pnr\n\t\           Cnr  "=="  ">="  "<="  COUNT
-#ORG#echo -e Functions: SUM, PRODUCT, COUNT, FACT, MEAN, SQRT, INV, VARP, VARS, STDEVP,\n\t\   STDEVS, "==", ">=", "<=", Pnr, Cnr, CRT
 echo -e Use\tCALCD.G4B [switch] function number1 [number2]\x20|\x20number1 number2\x20|\x20args
 echo -e Infix\tOperators:  +   -   *   /  ^   Functions: ROUND  DECI  DIGI  FIX
 echo -e Use\tCALCD.G4B [switch] number1 operator|function number2|NUMBER
-#ORG#echo -e Use:\tCALCD.G4B <number1> <operator> <number2> [<operator> <number3> ...]
 echo -e Postfix\tFunctions: INV  SQRT  SQ  CBRT  CB  HEX  THSEP
 echo -e Use\tCALCD.G4B [switch] number function
 echo -e Memory\tFunctions: M  M+  M-  RM   Clear: MC   Placeholders for number: MR  R
 echo -e Help\tCALCD.G4B help|--help|/? [function|operator|mem|ver]
-#ORG#echo -e Help\tFunction-/ operator-/ memory-/ syntaxis-specific
-#ORG#echo -e Use\tCALCD.G4B help function|operator|mem|syntax
 echo -e Remarks\tSwitches: /echo or /echoM or /echoR or /V (debug msg=3) or /Q (quiet)\n\tNumbers: \xF1 10exp-18 - 2exp63-1, 0!-20!, MR, R (integers: hex too)\n\tThousand-comma-separator allowed. Decimals: dot, NOT comma (no hex)\n\tTHSEP: adds thousand-comma-separator to last result\n\tOrder of calculation: from left to right. NO brackets allowed\n\tError-messages are echood, while 'result' is deleted (last result: 'R')
 echo -e \tContinue calculation: infix/postfix operator/function with last result\n\tRestart: prefix function or number and infix/postfix operator/function\n\tMemory functions do not interrupt calculation (RM exchanges R and MR)\n\tNames/ switches case-insensitive, variables are case-sensitive!\n\tEnding COUNT: with \\\\ only\n\tWatch double-quotes in "=="  ">="  "<="
 echo -e Prefix\tFunctions SUM PRODUCT MEAN VARP VARS STDEVP STDEVS come before at least\n\ttwo numbers, COUNT needs minimal one argument ( \\\\ is not counted!)\n\tFACT (Factorial) one integer: 0-20. Pnr (Permutation) and Cnr (Combina-\n\ttion) two integers: n and r (n: 1-20 and r: 0-20)\n\tCompare: "==" ">=" "<=" (double qoutes mandatory!) needs two numbers
 echo -e Infix\tOperators + - * / between number/ existing result and second number\n\tOperator ^ between number/result and power (positive whole powers!)\n\tFunctions ROUND and DECI (=strip) between number/ result and integer\n\t(negative: rounds integers). DIGI (rounds) sets number of digits\n\t(negative: less digits). FIX (rounds) sets number of decimals/ zeros
 echo -e Postfix\tFunctions INV (inverse) SQRT (square root) SQ (square) CBRT\n\t(cubic root) CB (cubic) HEX and THSEP: come after one number/ result\n\tHEX: no rounding, cut-off decimals\n\tTHSEP adds thousand-comma-separator to last result, earlier ignored!
-#ORG#echo -e Remark:\tArguments are space-separated, without '<' and '>', '[..]' is optional\n\tSwitches before argument: /echo or /echoM or /echoR or /V (debug msg=3)\n\tOrder of calculation: from left to right. NO brackets allowed\n\tHighest supported result: 9223372036854775807 - about 19 integer digits\n\t + 18 decimals. Highest input depends on function/ operator: see Help\n\tLowest number: 0.0000000000000000001 (decimals: use dot, NO comma)\n\tError-messages are echood, while 'result' is deleted (last result: 'R')\n\tInput of hexa-decimal integers allowed. Decimals: decimal numbers only\n\tNew function/ calculation after '\\\\'. Names/ switches case-insensitive
 echo -e Example CALCD.G4B help /
 echo -e Example CALCD.G4B help STDEVP
 echo -e Example CALCD.G4B --help THSEP
@@ -1534,14 +1529,11 @@ echo -e Example CALCD.G4B /? mem
 echo -e Example CALCD.G4B 38 + 2.5 - -27.315 * 1.2895 / -3.1234 ^ 4 SQRT
 echo -e Example CALCD.G4B /echo SUM 3.4 2.3 1.2 / 3 M STDEVP 0.5 1 2 M+ MR ROUND 5
 echo -e Example CALCD.G4B 1 SQRT M 4 SQRT M+ 9 SQRT M+ 16 SQRT M+ 25 SQRT M+ MR
-#ORG#echo -e Example CALCD.G4B SUM 3 2.5 2.3 1.2 3.1 / 5 M \\\\ STDEVP 0.5 1 2 3 4 5 6 + MR
 if %pagersts%==1 && pager on ! pager off
 if exist debugsts && debug %debugsts%
 endlocal && goto :eof
 
 :smallhelp
-#echo -e $[0x07]CALCD.G4B v2.0
-#echo -e $[0x08]CALCD.G4B v2.0
 echo -e Prefix\tFunctions: SUM PRODUCT MEAN VARP VARS STDEVP STDEVS FACT Pnr Cnr\n\t\           "==" ">=" "<=" COUNT
 echo -e Use\tCALCD.G4B [switch] function number1 [number2]\x20|\x20number1 number2\x20|\x20args
 echo -e Infix\tOperators: + - * / ^  Functions: ROUND DECI DIGI FIX
@@ -1558,37 +1550,3 @@ goto :eof
 
 #-#+ VER \t  VERSIONS in historical order
 #-# Operator: SUMMATION v.0.1.9 (20220914)\nOperator: SUBSTRACTION v.0.1.8 (20220914)\nOperator: MULTIPLICATION v.0.1.9 (20220918)\nOperator: DIVISION v.0.1.11 (20220920)\nOperator: EXPONENTATION v.0.1.9 (20220914)\nFunction: SQUARE ROOT v.0.1.9 (20220921)\nFunction: INV v.0.1.2 (20220731)\nFunction: SUM v.0.1.4 (20220730)\nFunction: COUNT v.0.1.5 (20220815)\nFunction: PRODUCT v.0.1.2 (20220729)\nFunction: MEAN v.0.1.2 (20220731)\nFunction: FACT v.0.1.2 (20220815)\nFunction: VARP v.0.1.1 (20220730)\nFunction: VARS v.0.1.1 (20220730)\nFunction: STDEVP v.0.1.1 (20220730)\nFunction: STDEVS v.0.1.1 (20220730)\nFunction: "==" v.0.1.2 (20220903)\nFunction: ">=" v.0.1.2 (20220904)\nFunction: "<=" v.0.1.2 (20220904)\nFunction: PERMUTATION v.0.1.1 (20220811)\nFunction: COMBINATION v.0.1.1 (20220811)\nFunction: ROUND v.0.1.5 (20220917)\nFunction: DECI v.0.1.5 (20220925)\nFunction: DIGI v.0.1.3 (20220914)\nFunction: FIX v.0.1.3 (20220925)\nFunction: CUBIC ROOT v.0.1.3 (20221009)\nFunction: HEX v.0.1.1 (20220928)\nFunction: SQ v.0.1 (20221001)\nFunction: CB v.0.1 (20221001)\nFunction: THSEP v.0.1 (20221005)
-
-#ORG#:helpmem #-#
-echo -e Helper:\tMEMORY v.0.1.4 (20220924)
-echo -e Memory:\tMC/ M/ M+/ M- reset/ writes/ adds/ substract number/ result to memory\n\tMR is memory-read, used as number. RM exchanges result and memory
-echo -e Use 1:\tCALCD.G4B [/echoM] <number1> <M|M+|M-> <operator> <number3|MR> [...]
-echo -e Use 2:\tCALCD.G4B [/echoM] [<R>] <MC|M|M+|M-> [<number1> <operator> <number2>
-echo -e Use 3:\tCALCD.G4B [/echoM] <number1> <M|M+|M-> <number2|MR> <operator> .....
-echo -e Use 4:\tCALCD.G4B [/echoM] <RM> <operator> <number1|MR> [<M|M+|M->] [...]
-echo -e Use 5:\tCALCD.G4B [/echoM] <number1|MR> <operator> <number2|MR> <RM> [.....]
-echo -e Use 6:\tCALCD.G4B [/echoM] <MR>\x20|\x20[<R>] <M+|M-|RM> [.......]
-echo -e Remark:\tArguments are space-separated, without '<' and '>', '[..]' is optional\n\tIf variable 'MR' not exist: 'MR' is set to '0'. 'R' is placeholder for\n\texisting variable 'result', before (next) use of CALCD.G4B\n\tRM needs existing variable 'result', before or during calculation\n\tWriting to memory with MC|M|M+|M-|RM will not interrupt calculation\n\tSwitch /echoM echos changing MR, /echoR echos changing R, /echo both
-echo -e Example CALCD.G4B MC 8 * 7 M+ MR + 1
-echo -e Example CALCD.G4B M 8 * 7 M+ MR + 1
-echo -e Example CALCD.G4B RM * 8 RM - MR
-echo -e Example CALCD.G4B /echoM 7 M 8 * MR RM - 7 M+
-echo -e Example CALCD.G4B /echoR SUM 7 8 M \\\\ PRODUCT 7 8 + MR / 7 M+ RM ROUND 4
-echo -e Example CALCD.G4B /echo R M+ RM
-echo -e Example CALCD.G4B MR
-echo -e Example CALCD.G4B 2 ^ 62 M - 1 M+ \\\\ MR
-goto :eof
-
-#ORG#:helpsyntax
-echo && echo Help:    SYNTAXIS v.0.1.3 (20220925)
-echo -e Numbers: Positive and negative numbers allowed (except in SQRT and as 'power')\n\t Range is function-specific. Input: integer, integer.decimal(s),\n\t -integer.decimal(s), +integer.decimal(s), -0.decimal(s), .decimal(s),\n\t -.decimal(s), +.decimal(s). Hexa-decimal integers allowed\n\t Factorial integers allowed from 0! up to 20! (without decimals!)\n\t Combinations: 'number + - number', or 'number - - number' not allowed\n\t Use of comma's ONLY as thousend seperator allowed, or abort calculation\n\t Placeholders for existing result: R , for number in memory: MR
-#ORG#echo -e Numbers: Positive and negative numbers allowed (except in SQRT and as 'power')\n\t Range is function-specific. Input: integer, integer.decimal(s),\n\t -integer.decimal(s), +integer.decimal(s), -0.decimal(s), .decimal(s),\n\t -.decimal(s), +.decimal(s). Hexa-decimal integers allowed\n\t Factorial integers allowed from 0! up to 20! (without decimals!)\n\t Combinations: 'number + - number', or 'number - - number' not allowed\n\t Use of comma's is never allowed and will abort calculation\n\t Placeholders for existing result: R , for number in memory: MR
-echo -e Functions: Only as first argument or after '\\\\' (without quotes)
-echo -e \t SQRT and INV can also be used if result of calculation before exists\n\t Other functions only before their arguments
-echo -e Operators: Needs always number or existing result before and number after
-echo -e Memory:  Commands MC , M , M+ , M- , changes value of variable 'MR' only\n\t RM exchanges existing result and value of 'MR'
-echo -e Remarks: Command-line not case-sensitive, switches/ arguments space-separated\n\t Calculations can be continued with (quasi)-operators (except COUNT)\n\t Placeholders -MR and -R are allowed to\n\t Switches /echo or /echoR or /echoM or /V always first on command-line
-echo -e Example: CALCD.G4B /echoR 1 + 2 - -3 * -4 / -5 ^ 6 SQRT INV ROUND 4
-echo -e Example: CALCD.G4B /echoR 0xA.10 + 0xB.11 - 0xC.12 * 0xD.13 / 0xE.14 ^ 0xF
-echo -e Example: CALCD.G4B SUM 1 2 3 4 5 / 5 * 0.6 M \\\\ MEAN 2 3 4 5 6 * 0.4 M+ RM
-goto :eof
