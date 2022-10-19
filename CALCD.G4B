@@ -1,6 +1,6 @@
 !BAT
-#-#+ CALCD.G4B v2.0 (20221020), by deomsh
-if "%~1"=="" && echo CALCD.G4B v2.0 && goto :smallhelp
+#-#+ CALCD.G4B v0.2 (20221020), by deomsh
+if "%~1"=="" && echo CALCD.G4B v0.2 && goto :smallhelp
 if "%~1"=="/?" && goto :help
 if "%~1"=="--help" && goto :help
 if "%~1"=="help" && goto :%~1
@@ -1507,7 +1507,7 @@ if exist FILE && set /A start=%start%+%echolen% > nul &; cat --skip=%start% --lo
 if exist FILE &; if %pagersts%==1 && pager on ! pager off
 if exist FILE && endlocal && goto :eof
 if not "%~2"=="" && goto :help%~2
-echo -e Help\tCALCD.G4B v2.0 (20221020), by deomsh
+echo -e Help\tCALCD.G4B v0.2 (20221020), by deomsh
 echo -e Output\tResult echood and if exists in variables result R MR lastrnd or message
 echo -e Prefix\tFunctions: SUM  PRODUCT  MEAN  VARP  VARS  STDEVP  STDEVS  FACT  Pnr\n\t\           Cnr  "=="  ">="  "<="  COUNT
 #ORG#echo -e Functions: SUM, PRODUCT, COUNT, FACT, MEAN, SQRT, INV, VARP, VARS, STDEVP,\n\t\   STDEVS, "==", ">=", "<=", Pnr, Cnr, CRT
