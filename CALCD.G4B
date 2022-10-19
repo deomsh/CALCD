@@ -1,12 +1,12 @@
 !BAT
-#-#+ CALCD.G4B v2.0 (20221018), by deomsh
+#-#+ CALCD.G4B v2.0 (20221020), by deomsh
 if "%~1"=="" && echo CALCD.G4B v2.0 && goto :smallhelp
 if "%~1"=="/?" && goto :help
 if "%~1"=="--help" && goto :help
 if "%~1"=="help" && goto :%~1
 setlocal && set * && set result=%result% && set MR=%MR% && set round=%round% && set deci=%deci% && set digi=%digi% && set fix=%fix% && set resrnd=%resrnd% && set hex=%hex% && set R=%R% && set thsep=%thsep%
 debug msg=0
-if not %fix:~0,1%==- && set fix=
+if %fix:~0,1%==- && set fix=
 #NOTNEEDED#if not %fix:~0,1%==- if not exist hex || set fix=
 set shift=0 && set "echoMR= > nul" && set q=N
 if not /i "%~1"=="/Q" if not /i "%~2"=="/Q" if not /i "%~3"=="/Q" if not /i "%~4"=="/Q" || set q=Y && set /a shift=%shift% + 1
@@ -36,7 +36,7 @@ if /i %~1==m- && call :- - %MR% %R% &; if exist result && echo -e -n $[0x08]MR=%
 if "%~1"=="" && goto :calcfpend
 if /i %~2==m && set memrnd=%lastrnd% && set MR=%~1 && echo -e -n $[0x08]MR=%~1\x20\x20%echoMR% && set memecho=Y &; if not "%~3"=="" && set result=%~1 && shift && shift && goto :calcfploop ! goto :calcfpend
 if /i "%~2"=="m+" && call :+ + %MR% %~1 &; if exist result && echo -e -n $[0x08]MR=%result%\x20\x20%echoMR% && set memecho=Y && set MR=%result% && set memrnd=%lastrnd% && set result=%~1 && shift && shift && goto :calcfploop ! goto :calcfpend
-if /i "%~2"=="m-" && call :- - %MR% %~1 &; if exist result && echo -e -n $[0x08]MR=%result%\x20\x20%echoMR% && set memecho=Y && set MR=%result% && set memrnd=%lastrnd% && set result=%~1 && shift && shift && goto :calcfloop ! goto :calcfpend
+if /i "%~2"=="m-" && call :- - %MR% %~1 &; if exist result && echo -e -n $[0x08]MR=%result%\x20\x20%echoMR% && set memecho=Y && set MR=%result% && set memrnd=%lastrnd% && set result=%~1 && shift && shift && goto :calcfploop ! goto :calcfpend
 if not "%~1"=="==" if not "%~1"==">=" if not "%~1"=="<=" |; call :"%~1" "%~1" %~2 %~3 &; if not "%~4"=="" && shift && shift && shift && set rounded= && set lastrnd= && goto :calcfploop ! set rounded= && set lastrnd= && goto :calcfpend
 if not /i "%~1"=="sum" if not /i "%~1"=="count" if not /i "%~1"=="mean" if not /i "%~1"=="product" if not /i "%~1"=="fact" if not /i "%~1"=="varp" if not /i "%~1"=="vars" if not /i "%~1"=="stdevp" if not /i "%~1"=="stdevs" if not /i "%~1"=="Pnr" if not /i "%~1"=="Cnr" || goto :%~1
 if not /i "%~1"=="sqrt" if not /i "%~1"=="cbrt" if not /i "%~1"=="hex" if not /i "%~1"=="sq" if not /i "%~1"=="cb" |; call :%~1 %~1 %R% &; if exist result && if not "%~2"=="" && shift && goto :calcfprestart ! goto :calcfpend
@@ -860,17 +860,16 @@ if exist md && if %md:~-3,3%>=256 &; if %goback%==Y && endlocal && set "message=
 if not exist md && set N1=%~1 &; if /i %N1:~-2,2%==mr && set N1=%N1:~0,-2%%%MR% && set lastrnd=%memrnd% ! if /i %N1%==r && set N1=%R% ! if /i %N1%==-r && set N1=-%R%
 if not exist md && set N2=%~2 &; if /i %N2:~-2,2%==mr && set N2=%N2:~0,-2%%%MR% && set lastrnd=%memrnd% ! if /i %N2%==r && set N2=%R% ! if /i %N2%==-r && set N2=-%R%
 if not exist md && call :+ + %N1% %N2% &; if exist result && if not "%~3"=="" && shift && shift && goto :sumloop ! if %goback%==Y && endlocal && set "message=%message%" && set result=%result% && set rounded=%rounded% && goto :eof ! endlocal && set "message=%message%" && set result=%result% && set rounded=%rounded% && goto :calcfpend
-cat %md% | call :sumloop  &; if "%~1"=="" &; if %goback%==Y && if exist result && endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :eof ! endlocal && set "message=%message%" && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :calcfpend
+cat %md% | call :sumloop  &; if "%~1"=="" &; if %goback%==Y && endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :eof ! endlocal && set "message=%message%" && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :calcfpend
 if not /i "%~1"=="sqrt" if not /i "%~1"=="cbrt" if not /i "%~1"=="inv" if not /i "%~1"=="m" if not /i "%~1"=="m+" if not /i "%~1"=="m-" if not /i "%~1"=="rm" if not "%~1"=="\\" if not /i "%~1"=="hex" if not /i "%~1"=="sq" if not /i "%~1"=="cb" if not /i "%~1"=="thsep" |; if %goback%==Y && endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :eof ! endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :calcfploop
-if not "%~1"=="+" if not "%~1"=="-" if not "%~1"=="*" if not "%~1"=="/" if not "%~1"=="^" if not /i "%~1"=="round" if not /i "%~1"=="deci" if not /i "%~1"=="digi" if not /i "%~1"=="fix" |; if %goback%==Y && endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :eof ! endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :calcfloop
+if not "%~1"=="+" if not "%~1"=="-" if not "%~1"=="*" if not "%~1"=="/" if not "%~1"=="^" if not /i "%~1"=="round" if not /i "%~1"=="deci" if not /i "%~1"=="digi" if not /i "%~1"=="fix" |; if %goback%==Y && endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :eof ! endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :calcfploop
 if not /i "%~1"=="sum" if not /i "%~1"=="count" if not /i "%~1"=="mean" if not /i "%~1"=="product" if not /i "%~1"=="fact" if not /i "%~1"=="varp" if not /i "%~1"=="vars" if not /i "%~1"=="stdevp" if not /i "%~1"=="stdevs" if not /i "%~1"=="Pnr" if not /i "%~1"=="Cnr" if not "%~1"=="==" if not "%~1"==">=" if not "%~1"=="<=" |; if %goback%==Y && endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :eof ! endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :calcfprestart
 if not /i "%~1"=="ts" if not /i "%~1"=="tsp" if not /i "%~1"=="tsep" if not /i "%~1"=="ths" if not /i "%~1"=="thsp" if not /i "%~1"=="thsep" if not /i "%~1"=="thssep" |; if %goback%==Y && endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :eof ! endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :calcfploop
 if %goback%==Y && endlocal && set "message=%message%" && set result=%result% && set lastrnd=%lastrnd% && goto :eof ! endlocal && set result=%result% && set "message=%message%" && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :calcfpend
 :sumloop
-#echo %*
 if exist md && if "%~1"=="" && goto :eof
 if exist md && if exist result && call :+ + %result% %~1 &; if not exist result && goto :eof
-if exist md && if not exist result && call :+ + %~1 %~2 &; shift && shift && if not exist result && goto :eof
+if exist md && if not exist result && call :+ + %~1 %~2 &; shift && if not exist result && goto :eof
 if exist md && shift && goto :sumloop
 if not /i "%~1"=="sqrt" if not /i "%~1"=="cbrt" if not /i "%~1"=="inv" if not /i "%~1"=="m" if not /i "%~1"=="m+" if not /i "%~1"=="m-" if not /i "%~1"=="rm" if not "%~1"=="\\" if not /i "%~1"=="hex" if not /i "%~1"=="sq" if not /i "%~1"=="cb" if not /i "%~1"=="thsep" |; if %goback%==Y && endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :eof ! endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :calcfploop
 if not "%~1"=="+" if not "%~1"=="-" if not "%~1"=="*" if not "%~1"=="/" if not "%~1"=="^" if not /i "%~1"=="round" if not /i "%~1"=="deci" if not /i "%~1"=="digi" if not /i "%~1"=="fix" |; if %goback%==Y && endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :eof ! endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :calcfploop
@@ -898,7 +897,7 @@ if not exist md && goto :countloop
 #USERMUSTDO#cat --locate== --number=1 %md% > nul && cat --locate== --replace=- %md% > nul
 #USERMUSTDO#cat --locate=% --number=1 %md% > nul && cat --locate=% --replace=# %md% > nul
 #USERMUSTDO#cat --locate=\x22 --number=1 %md% > nul && cat --locate=\x22 --replace=\x27 %md% > nul
-cat %md% | call :countloop &; if %count%>=1 && set result=%count% ! endlocal && set "message=%message%" && goto :eof
+cat %md% | call :countloop  &; if %count%>=1 && set result=%count% ! endlocal && set "message=%message%" && goto :eof
 if not /i "%~1"=="sqrt" if not /i "%~1"=="cbrt" if not /i "%~1"=="inv" if not /i "%~1"=="m" if not /i "%~1"=="m+" if not /i "%~1"=="m-" if not /i "%~1"=="rm" if not "%~1"=="\\" if not /i "%~1"=="hex" if not /i "%~1"=="sq" if not /i "%~1"=="cb" if not /i "%~1"=="thsep" |; if %goback%==Y && endlocal && set result=%result% && goto :eof ! endlocal && set result=%result% && goto :calcfploop
 if not "%~1"=="+" if not "%~1"=="-" if not "%~1"=="*" if not "%~1"=="/" if not "%~1"=="^" if not /i "%~1"=="round" if not /i "%~1"=="deci" if not /i "%~1"=="digi" if not /i "%~1"=="fix" |; if %goback%==Y && endlocal && set result=%result% && goto :eof ! endlocal && set result=%result% && goto :calcfploop
 if not /i "%~1"=="sum" if not /i "%~1"=="count" if not /i "%~1"=="mean" if not /i "%~1"=="product" if not /i "%~1"=="fact" if not /i "%~1"=="varp" if not /i "%~1"=="vars" if not /i "%~1"=="stdevp" if not /i "%~1"=="stdevs" if not /i "%~1"=="Pnr" if not /i "%~1"=="Cnr" if not "%~1"=="==" if not "%~1"==">=" if not "%~1"=="<=" |; if %goback%==Y && endlocal && set result=%result% && goto :eof ! endlocal && set result=%result% && goto :calcfprestart
@@ -960,7 +959,7 @@ if exist md && if %md:~-3,3%>=256 &; if %goback%==Y && endlocal && set "message=
 if not exist md && set N1=%~1 &; if /i %N1:~-2,2%==mr && set N1=%N1:~0,-2%%%MR% && set lastrnd=%memrnd% ! if /i %N1%==r && set N1=%R% ! if /i %N1%==-r && set N1=-%R%
 if not exist md && set N2=%~2 &; if /i %N2:~-2,2%==mr && set N2=%N2:~0,-2%%%MR% && set lastrnd=%memrnd% ! if /i %N2%==r && set N2=%R% ! if /i %N2%==-r && set N2=-%R%
 if not exist md && call :* * %N1% %N2% &; if exist result && if not "%~3"=="" && shift && shift && goto :productloop ! if %goback%==Y && endlocal && set result=%result% && set rounded=%rounded% && set "message=%message%" && goto :eof ! endlocal && set "message=%message%" && set result=%result% && goto :calcfpend
-cat %md% | call :productloop &; if exist result && if "%~1"=="" && endlocal && set result=%result% && goto :calcfpend ! if not exist result && endlocal && set "message=%message%" && set result= && goto :calcfpend
+cat %md% | call :productloop  &; if exist result && if "%~1"=="" && endlocal && set result=%result% && goto :calcfpend ! if not exist result && endlocal && set "message=%message%" && set result= && goto :calcfpend
 if not /i "%~1"=="sqrt" if not /i "%~1"=="cbrt" if not /i "%~1"=="inv" if not /i "%~1"=="m" if not /i "%~1"=="m+" if not /i "%~1"=="m-" if not /i "%~1"=="rm" if not "%~1"=="\\" if not /i "%~1"=="hex" if not /i "%~1"=="sq" if not /i "%~1"=="cb" if not /i "%~1"=="thsep" |; if %goback%==Y && endlocal && set result=%result% && set rounded=%rounded% && set "message=%message%" && set lastrnd=%lastrnd% && goto :eof ! endlocal && set result=%result% && set rounded=%rounded% && set "message=%message%" && set lastrnd=%lastrnd% && goto :calcfploop
 if not "%~1"=="+" if not "%~1"=="-" if not "%~1"=="*" if not "%~1"=="/" if not "%~1"=="^" if not /i "%~1"=="round" if not /i "%~1"=="deci" if not /i "%~1"=="digi" if not /i "%~1"=="fix" |; if %goback%==Y && endlocal && set result=%result% && set rounded=%rounded% && set "message=%message%" && set lastrnd=%lastrnd% && goto :eof ! endlocal && set result=%result% && set rounded=%rounded% && set "message=%message%" && set lastrnd=%lastrnd% && goto :calcfploop
 if not /i "%~1"=="sum" if not /i "%~1"=="count" if not /i "%~1"=="mean" if not /i "%~1"=="product" if not /i "%~1"=="fact" if not /i "%~1"=="varp" if not /i "%~1"=="vars" if not /i "%~1"=="stdevp" if not /i "%~1"=="stdevs" if not /i "%~1"=="Pnr" if not /i "%~1"=="Cnr" if not "%~1"=="==" if not "%~1"==">=" if not "%~1"=="<=" |; endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :calcfprestart
@@ -968,8 +967,8 @@ if not /i "%~1"=="ts" if not /i "%~1"=="tsp" if not /i "%~1"=="tsep" if not /i "
 if %goback%==Y && endlocal && set result=%result% && set "message=%message%" && goto :eof ! endlocal && set result=%result% && set "message=%message%" && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :calcfpend
 :productloop
 if exist md && if "%~1"=="" && goto :eof
-if exist md && if not exist result && call :* * %~1 %~2 &; shift && shift && if not exist result && goto :eof
 if exist md && if exist result && call :* * %result% %~1 &; if not exist result && goto :eof
+if exist md && if not exist result && call :* * %~1 %~2 &; shift && if not exist result && goto :eof
 if exist md && shift && goto :productloop
 if not /i "%~1"=="sqrt" if not /i "%~1"=="cbrt" if not /i "%~1"=="inv" if not /i "%~1"=="m" if not /i "%~1"=="m+" if not /i "%~1"=="m-" if not /i "%~1"=="rm" if not "%~1"=="\\" if not /i "%~1"=="hex" if not /i "%~1"=="sq" if not /i "%~1"=="cb" if not /i "%~1"=="thsep" |; if %goback%==Y && endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :eof ! endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :calcfploop
 if not "%~1"=="+" if not "%~1"=="-" if not "%~1"=="*" if not "%~1"=="/" if not "%~1"=="^" if not /i "%~1"=="round" if not /i "%~1"=="deci" if not /i "%~1"=="digi" if not /i "%~1"=="fix" |; if %goback%==Y && endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :eof ! endlocal && set result=%result% && set rounded=%rounded% && set lastrnd=%lastrnd% && goto :calcfploop
@@ -990,7 +989,6 @@ if %~1==goback && set goback=Y
 if "%~2"=="" &; if %goback%==Y && endlocal && set "message=Abort: argument 'number' is missing in FACT" && goto :eof ! endlocal && set "message=Abort: argument 'number' is missing in FACT" && goto :calcfpend
 shift
 set "ARG=%~1"
-#echo ARG=%ARG%
 set number1=%~n1 && set decimal1=%~x1 && shift
 if /i "%number1:~-1,1%"=="!" && set number1=%number1:~0,-1%
 if exist decimal1 &; if %goback%==Y && endlocal && set "message=Abort FACT: no decimals allowed in factorials, check '%ARG%'" && goto :eof ! endlocal && set "message=Abort FACT: no decimals allowed in factorials, check '%ARG%'" && goto :calcfpend
@@ -1092,7 +1090,8 @@ if /i %~1==md &; if %~d2==(md) && set md=%~2 && shift && shift ! endlocal && set
 if exist md && call Fn.11 "%md%" "+" || endlocal && set "message=Abort '%function%': (md)-device in '%md%' not valid" && set result= && goto :calcfpend
 if exist md && if %md:~-3,3%>=256 &; endlocal && set "message=Abort '%function%': sectors of (md)-device in '%md%' above 255" && set result= && goto :calcfpend
 set sum=0 && set count=0
-if exist md && call :mean goback md %md% &; set mean=%result% && set result= && cat %md% | call :variationloop &; if exist sum && if %count%>=2 && goto :variationcalculation ! endlocal && set "message=%message%" && set result= && goto :calcfpend
+if exist md && call :mean goback md %md% &; set mean=%result% && set result= && cat %md% | call :variationloop  &; if exist sum && if %count%>=2 && goto :variationcalculation ! endlocal && set "message=%message%" && set result= && goto :calcfpend
+#ORG#if exist md && call :mean goback md %md% &; set mean=%result% && set result= && cat %md% | call :variationloop &; if exist sum && if %count%>=2 && goto :variationcalculation ! endlocal && set "message=%message%" && set result= && goto :calcfpend
 if not exist md && call :mean goback %* &; if exist result && set mean=%result% && set result= && set goback= ! endlocal && set "message=%message%" && set result= && goto :calcfpend
 :variationloop
 if "%~1"=="" &; if not exist md && goto :variationcalculation ! goto :eof
@@ -1508,7 +1507,7 @@ if exist FILE && set /A start=%start%+%echolen% > nul &; cat --skip=%start% --lo
 if exist FILE &; if %pagersts%==1 && pager on ! pager off
 if exist FILE && endlocal && goto :eof
 if not "%~2"=="" && goto :help%~2
-echo -e Help\tCALCD.G4B v2.0 (20221018), by deomsh
+echo -e Help\tCALCD.G4B v2.0 (20221020), by deomsh
 echo -e Output\tResult echood and if exists in variables result R MR lastrnd or message
 echo -e Prefix\tFunctions: SUM  PRODUCT  MEAN  VARP  VARS  STDEVP  STDEVS  FACT  Pnr\n\t\           Cnr  "=="  ">="  "<="  COUNT
 #ORG#echo -e Functions: SUM, PRODUCT, COUNT, FACT, MEAN, SQRT, INV, VARP, VARS, STDEVP,\n\t\   STDEVS, "==", ">=", "<=", Pnr, Cnr, CRT
