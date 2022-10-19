@@ -1,7 +1,7 @@
 # CALCD
 Grub4dos script with extensions to grub4dos' function calc
 
-CALCD.G4B v2.0 (20221018), by deomsh
+CALCD.G4B v0.2 (20221020), by deomsh
 
 Output  Echood, if exists in variables 'result' 'MR' 'R' 'resrnd' and 'message'
 Prefix  Functions: SUM PRODUCT MEAN VARP VARS STDEVP STDEVS FACT Pnr Cnr "==" ">=" "<=" COUNT
@@ -18,7 +18,7 @@ BTW After Aborting errors text above is showed always - if you do not like it (a
 
 History:
 
-v2.0
+v0.2
 Bugfixes (especially in Cubic Root)
 Cubic Root (CBRT) gives 18 decimals now (but not rounded)
 Function CRT renamed to CBRT
