@@ -36,5 +36,5 @@ SQ: Square of number
 CB: Cubic of number
 New switch: /Q for quiet operation
 
-v0.1.21
+v0.1.20
 First published version
