@@ -1478,7 +1478,7 @@ if /i "%~1"=="nothsepar" && set thsepar=Y
 shift
 #NOTNEEDED#set n1=%~1 &; echo n1=%n1% && if /i %n1:~-2,2%==mr && set n1=%n1:~0,-2%%%MR% && set lastrnd=%memrnd% ! if /i %n1%==r && set n1=%R% ! if /i %n1%==-r && set n1=-%R%
 set n1=%~1 &; if /i "%n1:~-1,1%"=="!" && set n1=%n1:~0,-1% &; if %n1:~0,1%==- && set n1=%n1:~1% && set sign=- ! set sign= &; call :fact goback %n1% &; if exist result && set number=%sign%%%result% && set result= ! set rounded= && goto :endlocal
-call :operatersinput %n1% &; if exist message && goto :endlocal
+call :operatorsinput THSEP %n1% &; if exist message && goto :endlocal
 if %n1:~0,1%==- && set sign=- ! if %sign1%==-1 && set sign=-
 call Fn.11 "%n1%" "." && call :splitnumber %n1% &; set number=%N% && set N= && set numdecis=
 if not exist number && set /a number=%~n1 &; if not exist number && set result=%~1 && goto :endlocal
