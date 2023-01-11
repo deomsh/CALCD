@@ -1,10 +1,10 @@
 # CALCD
 Grub4dos script with extensions to grub4dos' function calc
 
-CALCD.G4B v0.2 (20221020), by deomsh
+CALCD.G4B v0.2.1 (20221211), by deomsh
 
 Output  Echood, if exists in variables 'result' 'MR' 'R' 'resrnd' and 'message'
-Prefix  Functions: SUM PRODUCT MEAN VARP VARS STDEVP STDEVS FACT Pnr Cnr "==" ">=" "<=" COUNT
+Prefix  Functions: SUM PRODUCT MEAN VARP VARS STDEVP STDEVS FACT Pnr Cnr "==" ">=" "<=" COUNT MIN MAX COUNTIF
 Use     CALCD.G4B [switch] function number1 [number2]|number1 number2|args
 Infix   Operators: + - * / ^  Functions: ROUND DECI DIGI FIX
 Use     CALCD.G4B [switch] number1 operator|function number2|NUMBER
@@ -18,7 +18,7 @@ BTW After Aborting errors text above is showed always - if you do not like it (a
 
 History:
 
-v0.2
+v0.2.1
 Bugfixes (especially in Cubic Root)
 Cubic Root (CBRT) gives 18 decimals now (but not rounded)
 Function CRT renamed to CBRT
@@ -28,13 +28,17 @@ Simpler handling of multiple calculations on command-line:
 - Functions INV, SQRT and M cannot be used before there argument anymore
 - Function CBRT must now be used after argument
 - Single number on command-line allowed (including MR, R and 0!-20!)
-Help has been rewritten, about 240 examples
+Help has been rewritten, about 250 examples
 New funtions:
-HEX: convert number/ result to hexa-decimal number
+HEX: convert number/ result to hexa-decimal number (rounddown!)
 THSEP: adds thousands-comma-separator to last number/ result (input with thousands-comma's allowed too)
 SQ: Square of number
 CB: Cubic of number
+MIN: lowest number on command-line/ (md)
+MAX: highest number on command-line/ (md)
+COUNTIF: count of numbers on command-line/ (md) 'satisfying' if-condition
 New switch: /Q for quiet operation
+Display of 'smallhelp' after (syntax-)error
 
 v0.1.20
 First published version
