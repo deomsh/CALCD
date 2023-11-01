@@ -16,6 +16,9 @@ Help    CALCD.G4B help|--help|/? [function|operator|mem|ver]
 
 BTW After Aborting errors text above is showed always - if you do not like it (anymore) use remarked line 89 instead of line 88
 
+Known bugs:
+CALCD.G4B is not working with 'debug off'/ 'debug 0'. So set minimal 'debug 1' on the grub4dos' command-line before use. Will be fixed in next release.
+
 History:
 
 v0.2.1
