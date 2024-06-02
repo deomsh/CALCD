@@ -45,3 +45,11 @@ Display of 'smallhelp' after (syntax-)error
 
 v0.1.20
 First published version
+
+BONUS
+
+
+
+v0.2
+First published version
+
