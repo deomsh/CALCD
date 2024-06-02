@@ -11,26 +11,26 @@ Use     CALCD.G4B [switch] number1 operator|function number2|NUMBER
 Postfix Functions: INV SQRT SQ CBRT CB LN LOG EX 10X HEX BIN[S] THSEP|TS
 Use     CALCD.G4B [switch] number function
 Memory  Functions: MS (Min), MP (M+), MN (M-), SRM (R/M), MC (clear), Placeholders for number: MR R
-Numbers ±10exp-18 - 2exp63-1, 0!-20!, a'b:c, e, pi, MR, R (integers hex too, decimals: dot)
+Numbers ±10exp-18 - 2exp63-1, 0!-20!, a'b:c, e, pi, MR, R (integers hex/ bin too, decimals: dot)
 Help    CALCD.G4B help|--help|/? [function|operator|mem|ver]
 
 History:
 
 v0.3
+New (input) number formats:
+Fractions: a'b:c (fractional output not supported)
+Negative exponent supported (p.d1^-q.d2)
+Decimals in exponent supported (p.d1^q.d2)
+Binary: 63-bits (starting with 0b)
+Full post-operators: k, m, g, e, pi
 New postfix function: JOIN (removes spaces)
 New postfix functions:
 10X: exponential function with base 10
 EX: exponential function with base e
 LOG: common logarithm
 LN: natural logarithm
-BIN[S]: output binary (starting with 0b), BINS splits in 0b nibbles (R is unsplit)
+BIN[S]: output binary (starting with 0b), BINS splits too in 0b nibbles (R is unsplit)
 New infix function: ROUNDUP
-Full post-operators: k, m, g, e, pi
-New (input) number formats:
-Fractions: a'b:c (fractional output not supported)
-Negative exponent supported (p.d1^-q.d2)
-Decimals in exponent supported (p.d1^q.d2)
-Binary: 63-bits (starting with 0b)
 New switch: --no-parse
 Switches now starting with --
 Memory functions renamed: M => MS, M+ => MP, M- => MN, RM => SRM
