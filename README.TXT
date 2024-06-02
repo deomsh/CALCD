@@ -1,7 +1,7 @@
 # CALCD
 Grub4dos script with extensions to grub4dos' function calc
 
-CALCD.G4B v0.2.1 (20221211), by deomsh
+CALCD.G4B v0.3 (20240602), by deomsh
 
 Output  Echood, if exists in variables 'result' 'MR' 'R' 'resrnd' and 'message'
 Prefix  Functions: SUM PRODUCT MEAN VARP VARS STDEVP STDEVS FACT Pnr Cnr "==" ">=" "<=" COUNT MIN MAX COUNTIF
@@ -14,12 +14,11 @@ Memory  Functions: M M+ M- RM  Clear: MC  Placeholders for number: MR R
 Numbers ± 10exp-18 - 2exp63-1, 0!-20!, MR, R (integers hex too, decimals: dot)
 Help    CALCD.G4B help|--help|/? [function|operator|mem|ver]
 
-BTW After Aborting errors text above is showed always - if you do not like it (anymore) use remarked line 89 instead of line 88
-
-Known bugs:
-CALCD.G4B is not working with 'debug off'/ 'debug 0'. So set minimal 'debug 1' on the grub4dos' command-line before use. Will be fixed in next release.
-
 History:
+
+v0.3
+Bugfix: no result with division if dividend is zero
+Bugfix: not working with 'debug off'/ 'debug 0'
 
 v0.2.1
 Bugfixes (especially in Cubic Root)
@@ -48,8 +47,21 @@ First published version
 
 BONUS
 
-
+FRACTION.G4B v0.2 (20240602), by deomsh
+Function:   Calculations with a'b:c fractions
+Use:        FRACTION.G4B [--Q|--V] fraction1 operator fraction2
+Switch:     '--Q': quiet operation OR '--V': echos sub-results
+Operators:  +  -  *  /  ^ (no fractioned exponents supported)
+Numbers:    ±10exp-18 - 2exp63-1 (hex-decimal input of a, b or c allowed)
+Dependency: For operator ^ needed CALCD.G4B >=v0.3 (in same directory)
+Exports:    Variable 'result'/ 'message' (if error)
+Reduction:  Supported up to divider 9999
+Example 1:  3:4 * 2:3
+Example 2:  1'3:4 + 2:3
+Example 3:  1'3:4 ^ 2
+Example 4:  7:8/1:8
+Example 5:  7:8-1:8
+Example 6:  7:8--1:8
 
 v0.2
 First published version
-
