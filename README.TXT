@@ -23,7 +23,7 @@ Negative exponent supported (p.d1^-q.d2)
 Decimals in exponent supported (p.d1^q.d2)
 Binary: 63-bits (starting with 0b)
 Full post-operators: k, m, g, e, pi
-New postfix function: JOIN (removes spaces)
+New prefix function: JOIN (removes spaces)
 New postfix functions:
 10X: exponential function with base 10
 EX: exponential function with base e
