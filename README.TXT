@@ -35,6 +35,7 @@ New switch: --no-parse
 Switches now starting with --
 Memory functions renamed: M => MS, M+ => MP, M- => MN, RM => SRM
 Parsing of command-line: (almost) no spaces needed between arguments
+Update Help: aliases of thousand sepator THSEP
 Bugfix: no result with division if dividend is zero
 Bugfix: not working with 'debug off'/ 'debug 0'
 
