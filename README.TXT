@@ -19,10 +19,10 @@ History:
 v0.3
 New postfix function: JOIN (removes spaces)
 New postfix functions:
-LOG: common logarithm
-LN: natural logarithm
 10X: exponential function with base 10
 EX: exponential function with base e
+LOG: common logarithm
+LN: natural logarithm
 BIN[S]: output binary (starting with 0b), BINS splits in 0b nibbles (R is unsplit)
 New infix function: ROUNDUP
 Full post-operators: k, m, g, e, pi
