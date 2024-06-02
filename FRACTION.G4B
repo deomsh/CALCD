@@ -1,0 +1,202 @@
+!BAT
+#-#+ FRACTION.G4B v0.2 (20240602), by deomsh
+#-#+ Function: calculations with a'b:c fractions
+if not "%~1"=="" if not "%~1"=="/?" || goto :help
+setlocal && set *
+if /i %~1==--Q && set Q=Y && shift
+if /i %~1==/Q && set Q=Y && shift
+if not exist Q && if /i %~1==--V && set V=Y && shift
+if not exist Q && if /i %~1==/V && set V=Y && shift
+if not "%~4"=="" && endlocal && set result= && set "message=Input '%~4' not allowed" && goto :eof
+if not "%~2"=="" && if "%~3"=="" && set result= && set "message=Missing argument" && goto :eof
+debug status > nul ;; set /a dbgstat=%@retval% > nul
+debug 1
+debug msg=0
+call :parsestring %* &; if exist STRING && call :ARGloop %STRING% ! call :ARGloop %* &; goto :eov
+::==============================
+# FRACTION MAIN-ROUTINE #
+::==============================
+:ARGloop
+set ARG=
+set "ARG=%~1" &; if "%ARG:~-1,1%"=="!" && goto :eof ! if "%ARG:~-1,1%"=="%" && goto :eof ! call Fn.11 "\x20" "%ARG%" && goto :eof
+if not %ARG%==+ if not %ARG%==- if not %ARG%==* if not %ARG%==/ if not %ARG%==^ || set operator=%ARG% && shift && goto :ARGloop
+call Fn.11 "%ARG%" "\x3A" &; if "%ARG:~0,1%"==":" && set "message=Bad syntax in '%ARG%'" && goto :eof ! if "%ARG:~-1,1%"==":" && set "message=Bad syntax in '%ARG%'" && goto :eof ! call Fn.11 "%ARG%" "\x27" && pause --wait=0 %ARG% > (md)0x301+1 && cat --locate=\x27 --length=1 (md)0x301+1 > nul && set "message=Bad syntax in '%ARG%'" && goto :eof ! cat --locate=\x27 --replace=\x3A (md)0x301+1 > nul && cat (md)0x301+1 | set ARG=
+call Fn.11 "%ARG%" "\x3A" && pause --wait=0 %ARG% > (md)0x301+1 &; cat --locate=\x3A --replace=\x20 (md)0x301+1 > nul && cat (md)0x301+1 | call :getab  &; if exist a && if not exist c && shift && goto :ARGloop
+if not exist a && set a=%ARG% && set b=1 && shift && goto :ARGloop ! if not exist c && set c=%ARG% && set d=1
+if exist A && set /a a=%A% * %b% + %a%
+if exist C && set /a c=%C% * %d% + %c%
+if not exist operator &; if exist c && endlocal && set result= && set "message=Operator missing or wrong" && goto :eof ! if exist a && if exist b && set T=%a% && set N=%b% && goto :reduction
+if "%operator%"=="+" &; if not %b%==%d% && set /a T1=%a% * %d% && set /a T2=%c% * %b% && set /a N=%b% * %d% &; set /a T=%T1%+%T2%
+if "%operator%"=="+" &; if %b%==%d% && set /a T=%a%+%c% && set N=%b%
+if "%operator%"=="-" &; if not %b%==%d% && set /a T1=%a% * %d% && set /a T2=%c% * %b% && set /a N=%b% * %d% &; set /a T=%T1%-%T2%
+if "%operator%"=="-" &; if %b%==%d% && set /a T=%a%-%c% && set N=%b%
+if "%operator%"=="*" && set /a T=%a% * %c% && set /a N=%b% * %d%
+if "%operator%"=="/" && set /a T=%a% * %d% && set /a N=%b% * %c%
+if "%operator%"=="^" && insmod CALCD.G4B && setlocal &; if %d%<=1 && call CALCD.G4B --no-parse --Q %a% ^ %c% ! set "message=No fractional exponent allowed" &; if exist message && endlocal && set "message=%message%" && goto :eof ! endlocal && set T=%result% && if %b%==1 && set N=%b% && goto :reduction
+if "%operator%"=="^" && setlocal &; if %d%<=1 && call CALCD.G4B --no-parse --Q %b% ^ %c%  ! set "message=No fractional exponent allowed" &; if not exist message && endlocal && set N=%result% ! endlocal && set "message=%message%" && goto :eof
+:reduction
+if %V%==Y &; if exist c && if not "%operator%"=="^" && if not %b%==%d% && echo %a%:%b% %operator% %c%:%d% = %T%:%N%
+if %V%==Y &; if exist c && if "%operator%"=="^" && echo %a%:%b% %operator% %c% = %T%:%N%
+if %T%==0 && set result=0 && goto :eof
+if "%T:~0,1%"=="-" && set sign=- && set T=%T:~1%
+if %T%==%N% && set result=%sign%%1 && goto :eof
+if %T%>=2 && call :GCF %T% %N%
+if exist GCF && set /a T=%T%/%GCF% && set /a N=%N%/%GCF%
+if %V%==Y &; if not %T%<=%N% && if exist c &; if not "%operator%"=="^" && echo %a%:%b% %operator% %c%:%d% = %sign%%%T%:%N% ! echo %a%:%b% %operator% %c% = %sign%%%T%:%N%
+if not %N%==1 && if not %T%<=%N% && calc %T% % %N% &; set /a r=%@retval% && set /a T=%T%/%N%
+if %N%==1 && set result=%sign%%%T% ! if not exist r && set result=%sign%%%T%:%N% ! if not exist sign && set result=%T%'%r%:%N% ! set result=%sign%%%T%'%r%:%N%
+goto :eof
+::
+:eov
+if not %Q%==Y &; if exist message && echo %message% && set result=
+if %V%==Y &; if exist result && if not "%operator%"=="^" &; if exist c && echo %a%:%b% %operator% %c%:%d% = %result% ! echo %a%:%b% = %result%
+if %V%==Y &; if exist result && if "%operator%"=="^" &; if exist c && echo %a%:%b% %operator% %c% = %result%
+if not %Q%==Y && if not %V%==Y &; echo result=%result%
+if "%operator%"=="^" && delmod CALCD.G4B
+if exist debugsts && debug %debugsts% > nul
+debug msg=3
+endlocal && set result=%result% && set "message=%message%"
+goto :eof
+::
+::==============================
+# FRACTION SUB-ROUTINES #
+::==============================
+:GCF
+setlocal
+set number1=%~1 && shift
+if not %number1%>=%~1 && set number2=%~1 && shift ! set number2=%number1% && set number1=%~1 && shift
+set c=2
+set GCF=1
+:GCFloop1
+calc %number1% % %c% > nul || calc %number2% % %c% > nul || set /a GCF=%GCF% * %c% && set /a number1=%number1%/%c% && set /a number2=%number2%/%c% && goto :GCFloop1
+set /a c=%c%+1
+:GCFloop2
+calc %number1% % %c% > nul || calc %number2% % %c% > nul || set /a GCF=%GCF% * %c% && set /a number1=%number1%/%c% && set /a number2=%number2%/%c% && goto :GCFloop2
+set /a c=%c%+2
+if %c%<=%number1% if %c%<=%number2% || endlocal && set GCF=%GCF% && goto :eof
+if not %c%<=9999 && echo Maximum GPF reached: 9999 && endlocal && set GCF=%GCF% && goto :eof
+#OKE#if not %c%<=4097 && echo Maximum GPF reached: 4097 && endlocal && set GCF=%GCF% && goto :eof
+#ORG#if not %c%<=1025 && echo Maximum GPF reached: 1025 && endlocal && set GCF=%GCF% && goto :eof
+goto :GCFloop2
+::
+:primeloop
+calc %number1% % %c% > nul || calc %number2% % %c% > nul || set /a GCF=%GCF% * %c% && set /a number1=%number1% / %c% && set /a number2=%number2% / %c% && goto :prime
+set /a c=%c%+1
+if %c%<=%number1% if %c%<=%number2% || endlocal && set GCF=%GCF% && goto :eof
+goto :primeloop
+::
+:getab
+if "%~1"=="" && set ARG3= && goto :eof
+if not "%~3"=="" && set ARG3=%~1 && shift
+if not exist a && if not exist ARG3 && set a=%~1 ! if not exist a && if exist ARG3 && set a=%~1 && set A=%ARG3% ! set c=%~1 && if exist ARG3 && set C=%ARG3%
+shift
+if not exist b && set b=%~1 ! set d=%~1
+shift
+goto :getab
+::
+::==============================
+# SUB-ROUTINE PARSESTRING #
+::==============================
+:parsestring
+setlocal && set *
+set /u "STRING=%*"
+call Fn.11 "%STRING%" "^" &; call :parsestr --char=^ %STRING% &; set "STRING=%result%" && set result=
+call Fn.11 "%STRING%" "/" &; call :parsestr --char=/ %STRING% &; set "STRING=%result%" && set result=
+call Fn.11 "%STRING%" "*" &; call :parsestr --char=* %STRING% &; set "STRING=%result%" && set result=
+call Fn.11 "%STRING%" "--" &; call :parsestr --get=-- --set=++ %STRING% &; set "STRING=%result%" && set result=
+call Fn.11 "%STRING%" "+-" &; call :parsestr --get=+- --set=-+ %STRING% &; set "STRING=%result%" && set result=
+call Fn.11 "%STRING%" "-" &; call :parsestr --char=- --skip=" -" --same=-+ %STRING% &; set "STRING=%result%" && set result=
+call Fn.11 "%STRING%" "+" &; call :parsestr --char=+ --skip=" +" --same=++ %STRING% &; set "STRING=%result%" && set result=
+call Fn.11 "%STRING%" "* + " &; call :parsestr --get="* + " --set="*  +" %STRING% &; set "STRING=%result%" && set result=
+call Fn.11 "%STRING%" "* - " &; call :parsestr --get="* - " --set="*  -" %STRING% &; set "STRING=%result%" && set result=
+call Fn.11 "%STRING%" "/ + " &; call :parsestr --get="/ + " --set="/  +" %STRING% &; set "STRING=%result%" && set result=
+call Fn.11 "%STRING%" "/ - " &; call :parsestr --get="/ - " --set="/  -" %STRING% &; set "STRING=%result%" && set result=
+call Fn.11 "%STRING%" " + + " &; call :parsestr --get=" + + " --set="  +  " %STRING% &; set "STRING=%result%" && set result=
+call Fn.11 "%STRING%" " - - " &; call :parsestr --get=" - - " --set="  +  " %STRING% &; set "STRING=%result%" && set result=
+call Fn.11 "%STRING%" " + - " &; call :parsestr --get=" + - " --set="  -  " %STRING% &; set "STRING=%result%" && set result=
+call Fn.11 "%STRING%" " - + " &; call :parsestr --get=" - + " --set="  -  " %STRING% &; set "STRING=%result%" && set result=
+call Fn.11 "%STRING%" "bins" &; call :parsestr --get=bins --set=BINS %STRING% &; set "STRING=%result%" && set result=
+if "%STRING%"=="0" && set STRING= ! set /l "STRING=%STRING%"
+endlocal && set "STRING=%STRING%"
+goto :eof
+::
+:parsestr
+setlocal
+:parseswitches
+if not exist char &; if /i "%~1"=="--char" && set "char=%~2" &; set /a charlen=%@retval% && shift && shift && goto :parseswitches
+if not exist same &; if /i "%~1"=="--same" && set "same=%~2" &; set /a samelen=%@retval% && shift && shift && goto :parseswitches
+if not exist skip &; if /i "%~1"=="--skip" && set "skip=%~2" &; set /a skiplen=%@retval% && shift && shift && goto :parseswitches
+if not exist GET &; if /i "%~1"=="--get" && set "GET=%~2" &; set /a GETLEN=%@retval% && shift && shift && goto :parseswitches
+if not exist SET &; if /i "%~1"=="--set" && set "SET=%~2" &; set /a SETLEN=%@retval% && shift && shift && goto :parseswitches
+if not exist notafter &; if /i "%~1"=="--na" && set "notafter=%~2" &; set /a nalen=%@retval% && shift && shift && goto :parseswitches
+set "STR= %*"
+set /a strinlen=%@retval%
+errorcheck off ;; if %STR:~0,1%"=="" && set start=DBQ
+if not %start%==DBQ && if not "%STR:~0,1%"==" " && set "STR= %STR%" && set /a strinlen=%strinlen%+1 ! if %start%==DBQ && set "STR= %STR%" && set /a strinlen=%strinlen%+1 && set start=
+errorcheck off ;; if %STR:~-1,1%"=="" && set end=DBQ
+if not %end%==DBQ && if not "%STR:~-1,1%"==" " && set "STR=%STR% " && set /a strinlen=%strinlen%+1 ! if %end%==DBQ && set "STR=%STR% " && set /a strinlen=%strinlen%+1 && set end=
+if not exist ins && set "ins= " && set inslen=1
+if not exist insalias && set insalias=? && set insallen=1
+if not exist chralias && set challen=1 && set chralias=#
+echo -n > (md)0x300+1
+if exist skip &; if %challen%==1 && set "chralias=%chralias%" ! if %challen%==2 && set "chralias=%chralias%%%chralias%" ! if %challen%==3 && set "chralias=%chralias%%%chralias%%%chralias%" ! if %challen%==4 && set "chralias=%chralias%%%chralias%%%chralias%%%chralias%" ! if %challen%==5 && set "chralias=%chralias%%%chralias%%%chralias%%%chralias%%%chralias%" ! if %challen%==6 && set "chralias=%chralias%%%chralias%%%chralias%%%chralias%%%chralias%%%chralias%" ! if %challen%==7 && set "chralias=%chralias%%%chralias%%%chralias%%%chralias%%%chralias%%%chralias%%%chralias%"
+if exist skip &; pause --wait=0 "%skip%" > (md)0x300+1 &; raw cat --locate=\x22\x0A --replace=\x00\x00 --number=1 (md)0x300+1 && raw cat --locate="%char%" --replace="%chralias%" (md)0x300+1 && raw cat (md)0x300+1 | set SKIP=
+if exist skip &; set "SKIP=%SKIP:~1%"
+echo -n > (md)0x300+1 && pause --wait=0 "%STR%" > (md)0x300+1 &; raw cat --locate=\x22 --replace=\x0A --number=1 (md)0x300+1 && raw cat --locate=\x22\x0A --replace=\x00\x00 --number=1 (md)0x300+1
+if exist GET && if exist SET &; raw cat --locate=\x0A --replace=\x22 --length=1 (md)0x300+1 && raw cat --locate="%GET%" --replace="%SET%" (md)0x300+1 && raw cat (md)0x300+1 | set str=
+if exist GET && if exist SET &; goto :cleanstr
+if exist skip &; raw cat --locate="%skip%" --replace="%SKIP%" (md)0x300+1
+#TooRestrictive#set "STR=%*" &; if %@retval%>=511 && echo Command-line %STR% is longer than 510 chars%NULL% && set result=0 && goto :eof
+if %inslen%==1 && set "insalias=%insalias%" ! if %inslen%==2 && set "insalias=%insalias%%%insalias%" ! if %inslen%==3 && set "insalias=%insalias%%%insalias%%%insalias%" ! if %inslen%==4 && set "insalias=%insalias%%%insalias%%%insalias%%%insalias%" ! if %inslen%==5 && set "insalias=%insalias%%%insalias%%%insalias%%%insalias%%%insalias%" ! if %inslen%==6 && set "insalias=%insalias%%%insalias%%%insalias%%%insalias%%%insalias%%%insalias%" ! if %inslen%==7 && set "insalias=%insalias%%%insalias%%%insalias%%%insalias%%%insalias%%%insalias%%%insalias%"
+set /a difflen=%samelen%-%charlen%
+if exist same &; if %difflen%==0 && set "replsame=%char%" ! if %difflen%==1 && set replsame=%char%\x20 ! if %difflen%==2 && set replsame=%char%\x20\x20 ! if %difflen%==3 && set replsame=%char%\x20\x20\x20 ! if %difflen%==4 && set replsame=%char%\x20\x20\x20\x20 ! if %difflen%==5 && set replsame=%char%\x20\x20\x20\x20\x20 ! if %difflen%==6 && set replsame=%char%\x20\x20\x20\x20\x20\x20 ! if %difflen%==7 && set replsame=%char%\x20\x20\x20\x20\x20\x20\x20
+if exist same &; raw cat --locate="%same%" --replace="%replsame%" (md)0x300+1 &; set /a numsame=%@retval%
+if exist notafter &; raw cat --locate="%notafter%" (md)0x300+1 > nul &; set /a skipna=%?% &; raw cat --skip=%skipna% --locate="%char%" --replace="%chralias%" --number=1 (md)0x300+1
+set skipchar=1 && set done=0 && set numchar=0 && set string=
+if "%char%"=="\\" && raw cat --skip=%skipchar% --locate=\x5C\x5C --length=%strinlen% (md)0x300+1 > nul ! raw cat --skip=%skipchar% --locate="%char%" --length=%strinlen% (md)0x300+1 > nul &; set /a numchar=%@retval%
+:charsloop
+if %numchar%>=1 && if not %done%==%numchar% &; raw cat --skip=%skipchar% --locate="%char%" --number=1 (md)0x300+1 > nul &; set /a skiplen=%?%-%skipchar% &; raw cat --skip=%skipchar% --length=%skiplen% (md)0x300+1 | set string=%string% &; set "string=%string%%%insalias%%%char%%%insalias%" && set /a skipchar=%skipchar%+%skiplen%+%charlen% && set /a done=%done%+1 && goto :charsloop
+#bad#if %numchar%>=2 && if not %done%==%numchar% &; raw cat --skip=%skipchar% --locate="%char%" --length=%strinlen% --number=1 (md)0x300+1 > nul &; set /a skiplen=%?%-%skipchar% &; raw cat --skip=%skipchar% --length=%skiplen% (md)0x300+1 | set string=%string% &; set "string=%string%%%insalias%%%char%%%insalias%" && set /a strinlen=%strinlen%-%skiplen%-%charlen% && set /a skipchar=%skipchar%+%charlen% && set /a done=%done%+1 && goto :charsloop
+if %numchar%>=1 && if %done%==%numchar% &; raw cat --skip=%skipchar% (md)0x300+1 | set string=%string%
+if %numchar%>=1 && if %done%==%numchar% &; echo -n > (md)0x300+1 && pause --wait=0 "%string%" > (md)0x300+1 &; raw cat --locate=\x22\x0A --replace=\x00\x00 --number=1 (md)0x300+1
+if %numchar%==0 && raw cat --locate=\x0A --replace=\x22 --length=1 (md)0x300+1
+if not "%char%"=="\\" && raw cat --locate="%insalias%" --replace="%ins%" (md)0x300+1
+if "%char%"=="\\" && raw cat --locate="%insalias%\x5C\x5C%insalias%" --replace="%ins%\x5C\x5C%ins%" (md)0x300+1
+if exist skip &; raw cat --locate="%SKIP%" --replace="%skip%" (md)0x300+1
+if exist notafter &; raw cat --locate="%chralias%" --replace="%char%" (md)0x300+1
+raw cat --locate=\x0A --replace=\x22 --length=1 (md)0x300+1
+:cleanstr
+raw cat --locate="%ins%%%ins%" (md)0x300+1 > nul && raw cat --locate=\x22 --replace=\x20 --length=1 (md)0x300+1 && raw cat (md)0x300+1 | call :clean &; echo -n > (md)0x300+1 && pause --wait=0 "%clean%" > (md)0x300+1 && raw cat --locate=\x22\x0A --replace=\x00\x00 --number=1 (md)0x300+1
+raw cat (md)0x300+1 | set str=
+set "str=%str:~1%"
+#BAD#if "%str:~0,1%"==" " &; set "str=%str:~1%"
+errorcheck off ;; if %str:~-1,1%"=="" && set start=DBQ
+if not %start%==DBQ && if "%str:~0,1%"==" " && set "str=%str:~1%"
+errorcheck off ;; if %str:~-1,1%"=="" && set end=DBQ
+if not %end%==DBQ && if "%str:~-1,1%"==" " && set "str=%str:~0,-1%"
+endlocal && set "result=%str%"
+goto :eof
+::
+:clean
+if "%1"=="" && goto :eof
+if not exist clean && set "clean=%1" ! set "clean=%clean%%%ins%%%1"
+shift
+goto :clean
+::
+:help
+echo FRACTION.G4B v0.2 (20240602), by deomsh
+echo Function:   Calculations with a'b:c fractions
+echo Use:        FRACTION.G4B [--Q|--V] fraction1 operator fraction2
+echo Switch:     '--Q': quiet operation OR '--V': echos sub-results
+echo Operators:  +  -  *  /  ^ (no fractioned exponents supported)
+echo -e Numbers:    \xF110exp-18 - 2exp63-1 (hex-decimal input of a, b or c allowed)
+echo Dependency: For operator ^ needed CALCD.G4B >=v0.3 (in same directory)
+echo Exports:    Variable 'result'/ 'message' (if error)
+echo Reduction:  Supported up to divider 9999
+echo Example 1:  3:4 * 2:3
+echo Example 2:  1'3:4 + 2:3
+echo Example 3:  1'3:4 ^ 2
+echo Example 4:  7:8/1:8
+echo Example 5:  7:8-1:8
+echo Example 6:  7:8--1:8
+goto :eof
