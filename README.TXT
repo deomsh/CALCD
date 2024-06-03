@@ -71,7 +71,7 @@ Function:   Calculations with a'b:c fractions
 Use:        FRACTION.G4B [--Q|--V] fraction1 operator fraction2
 Switch:     '--Q': quiet operation OR '--V': echos sub-results
 Operators:  +  -  *  /  ^ (no fractioned exponents supported)
-Numbers:    ±10exp-18 - 2exp63-1 (hex-decimal input of a, b or c allowed)
+Numbers:    ±2exp63-1 (hex-decimal input of a, b or c allowed)
 Dependency: For operator ^ needed CALCD.G4B >=v0.3 (in same directory)
 Exports:    Variable 'result'/ 'message' (if error)
 Reduction:  Supported up to divider 9999
