@@ -31,9 +31,9 @@ LOG: common logarithm
 LN: natural logarithm
 BIN[S]: output binary (starting with 0b), BINS splits too in 0b nibbles (R is unsplit)
 New infix function: ROUNDUP
+New switch: --no-parse (faster - also full grub4dos command-line now , about max 1535 chars)
 Switches now starting with --
 Memory functions renamed: M => MS, M+ => MP, M- => MN, RM => SRM
-New switch: --no-parse (faster - also full grub4dos command-line now , about max 1535 chars)
 Parsing of command-line: (almost) no spaces needed around operators/ functions
  (but max chars on command-line after parsing about max 511)
 Update Help: aliases of thousand sepator THSEP
