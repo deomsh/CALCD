@@ -15,7 +15,7 @@ Numbers ±10exp-18 - 2exp63-1, 0!-20!, a'b:c, e, pi, MR, R (integers hex/ bin to
 Help    CALCD.G4B help|--help|/? [function|operator|mem|ver]
 
 Using parenthes is possible with frontend PCALCD.G4B, a modification of Wonko the Sane's PCALC.G4B
-Available on: 
+Available on: http://reboot.pro/index.php?showtopic=23030#entry222994
 
 History:
 
