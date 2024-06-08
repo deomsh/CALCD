@@ -1,5 +1,5 @@
 !BAT
-#-#+ CALCD.G4B v0.3 (20240602), by deomsh
+#-#+ CALCD.G4B v0.3.1 (20240608), by deomsh
 if "%~1"=="" && echo CALCD.G4B v0.3 && goto :smallhelp
 if /i "%~1"=="/?" && goto :help
 if /i "%~1"=="--help" && goto :help
@@ -19,7 +19,9 @@ if not /i "%~1"=="--echoR" if not /i "%~2"=="--echoR" if not /i "%~3"=="--echoR"
 if not /i "%~1"=="--V" if not /i "%~2"=="--V" if not /i "%~3"=="--V" || debug msg=3 && set echoMR= && set "echor=call echo -n -e $[0x08]R=%^R%\x20\x20" && set /a shift=%shift%+1
 if %shift%>=1 &; if %shift%==1 && shift ! if %shift%==2 && shift && shift ! if %shift%==3 && shift && shift && shift ! if %shift%==4 && shift && shift && shift && shift ! if %shift%==5 && shift && shift && shift && shift && shift ! if %shift%==6 && shift && shift && shift && shift && shift && shift ! if %shift%==7 && shift && shift && shift && shift && shift && shift && shift
 if %q%==Y && set "echoMR= > nul" && set echor= && debug msg=0
-if not /i "%~1"=="+" && if not /i "%~1"=="-" && if not /i "%~1"=="*" && if not /i "%~1"=="/" && if not /i "%~1"=="^" && if not /i "%~1"=="round" && if not /i "%~1"=="deci" && if not /i "%~1"=="digi" && if not /i "%~1"=="fix" && if not /i "%~1"=="inv" && if not /i "%~1"=="sqrt" && if not /i "%~1"=="sq" && if not /i "%~1"=="cbrt" && if not /i "%~1"=="cb" && if not /i "%~1"=="ln" && if not /i "%~1"=="log" && if not /i "%~1"=="ex" && if not /i "%~1"=="10x" && if not /i "%~1"=="hex" && if not /i "%~1"=="thsep" && if not /i "%~1"=="r" && if not /i "%~2"=="r" && if not /i "%~3"=="r" && if not /i "%~1"=="rounddown" && if not /i "%~1"=="roundup" && set resrnd=
+set string=%*
+set /a strinlen=%@retval% &; if %parse%==Y && if %strinlen%<=479 && set strinlen= && set string=%~1 ! if %parse%==Y && set "message=Abort: command-line of %strinlen% chars too long to be parsed" && set string= && set strinlen= && set parse= && set result= && goto :calcfpend ! set strinlen= && set string=%~1
+call if not /i "%^string%"=="+" && call if not /i "%^string%"=="-" && call if not /i "%^string%"=="*" && call if not /i "%^string%"=="/" && call if not /i "%^string%"=="^" && call if not /i "%^string%"=="round" && call if not /i "%^string%"=="deci" && call if not /i "%^string%"=="digi" && call if not /i "%^string%"=="fix" && call if not /i "%^string%"=="inv" && call if not /i "%^string%"=="sqrt" && call if not /i "%^string%"=="sq" && call if not /i "%^string%"=="cbrt" && call if not /i "%^string%"=="cb" && call if not /i "%^string%"=="ln" && call if not /i "%^string%"=="log" && call if not /i "%^string%"=="ex" && call if not /i "%^string%"=="10x" && call if not /i "%^string%"=="hex" && call if not /i "%^string%"=="thsep" && call if not /i "%^string%"=="r" && if not /i "%~2"=="r" && if not /i "%~3"=="r" && call if not /i "%^string%"=="rounddown" && call if not /i "%^string%"=="roundup" && set resrnd= && set string= ! set string=
 if exist R && set result=%R% && set lastrnd=%resrnd% ! if exist result && set R=%result% && set resrnd= ! set R=0 && set result=0 && set resrnd=
 if not exist MR && set MR=0 && set memrnd=
 if not exist echoMR && echo -n -e $[0x08]MR=%MR%\x20
@@ -80,7 +82,7 @@ if "%~2"=="" && set "message=Abort: 'some' argument is missing or wrong, check '
 if exist result && if "%result:~-1,1%"=="!" && call :lastinput lastinput %result%
 if exist result && set R=%result% && set resrnd=%lastrnd%
 if exist echor &; setlocal && call :"==" "==" "%R%" "%result%" &; if %result%==1 && endlocal && %echor% ! endlocal
-if %rounded%==Y && if exist digi && set round= && set deci= && set vardigi=%digi% && call :digi digi "%result%" %digi% &; set digi=%vardigi%
+if exist result && if %rounded%==Y && if exist digi && set round= && set deci= && set vardigi=%digi% && call :digi digi "%result%" %digi% &; set digi=%vardigi%
 if exist result && if exist fix && set varfix=%fix% && set round= && set deci= && set fixed= && call :fix fix "%result%" "%fix%" &; set fix=%varfix%
 if exist result && if exist deci && set vardeci=%deci% && call :deci deci "%result%" %deci% &; set deci=%vardeci%
 if exist result && if exist round && set varround=%round% && call :round round "%result%" %round% &; set round=%varround%
@@ -144,7 +146,7 @@ call Fn.11 "%~1%~2" "%" && set "message=Abort '%function%': bad input, check '%~
 call Fn.11 "%~1%~2" "|" && set "message=Abort '%function%': bad input, check '%~1' or '%~2'" && goto :eof
 call Fn.11 "%~1%~2" "<" && set "message=Abort '%function%': bad input, check '%~1' or '%~2'" && goto :eof
 call Fn.11 "%~1%~2" ">" && set "message=Abort '%function%': bad input, check '%~1' or '%~2'" && goto :eof
-set N1=%~n1 &; if "%N1:~0,2%"=="--" && set N1=%N1:~2% && set sign1=1 ! if "%N1:~0,2%"=="+-" && set N1=%N1:~2% && set sign1=-1 ! if "%N1:~0,2%"=="-+" && set N1=%N1:~2% && set sign1=-1 ! if "%N1:~0,2%"=="++" && set N1=%N1:~2% && set sign1=1 ! if "%N1:~0,1%"=="-" && set N1=%N1:~1% && set sign1=-1 ! if "%N1:~0,1%"=="+" && set N1=%N1:~1% && set sign1=1 ! set N1=%N1% && set sign1=1
+set /l N1=%~n1 &; if %N1:~-1,1%==: && set "message=Bad input: no operators or +/- possible inside fractions, check '%N1%'" && goto :eof ! if "%N1:~0,2%"=="--" && set N1=%N1:~2% && set sign1=1 ! if "%N1:~0,2%"=="+-" && set N1=%N1:~2% && set sign1=-1 ! if "%N1:~0,2%"=="-+" && set N1=%N1:~2% && set sign1=-1 ! if "%N1:~0,2%"=="++" && set N1=%N1:~2% && set sign1=1 ! if "%N1:~0,1%"=="-" && set N1=%N1:~1% && set sign1=-1 ! if "%N1:~0,1%"=="+" && set N1=%N1:~1% && set sign1=1 ! set N1=%N1% && set sign1=1
 if not exist N1 && set N1=0 && set N1len=0 ! if "%N1:~0,2%"=="0x" && if %N1:~2%==0 && set N1=0 && set N1len=0
 if not %N1%==0 && call :stripzerosbefore "%N1%" &; if exist result && set N1=%result% &; set /a N1len=%@retval% && set result=
 if "%N1:~0,2%"=="0x" && call Fn.11 "%N1%" "," &; set "message=Abort '%function%': wrong comma, use dot for decimals. Check '%~1'" && goto :eof
@@ -153,37 +155,35 @@ if "%N1:~0,2%"=="0b" && if "%N1:~2,1%"==" " && if not "%N1:~3,1%"=="" &; call :j
 if "%N1:~0,2%"=="0b" && call :bin2decimal "%N1%" &; set N1=%result%
 call Fn.11 "%N1%" "," && if %N1len%>=5 &; if %N1:~-4,1%==, && set N1=%N1:~0,-4%%%N1:~-3,3% &; if %N1:~-7,1%==, && set N1=%N1:~0,-7%%%N1:~-6,6% &; if %N1:~-10,1%==, && set N1=%N1:~0,-10%%%N1:~-9,9% &; if %N1:~-13,1%==, && set N1=%N1:~0,-13%%%N1:~-12,12% &; if %N1:~-16,1%==, && set N1=%N1:~0,-16%%%N1:~-15,15% &; if %N1:~-19,1%==, && set N1=%N1:~0,-19%%%N1:~-18,18%
 call Fn.11 "%N1%" "," &; set "message=Abort '%function%': wrong comma, use dot for decimals. Check '%~1'" && goto :eof
-call Fn.11 "%N1%" ":" &; setlocal && set FR=%N1% &; call :fraction2decimal fraction "%FR%" &; call :splitnumber "%result%" &; if exist message && endlocal && set "message=%message%" && goto :eof ! endlocal && set N1=%N% && set decimal1=%decimals% && set numdeci1=%numdecis% && set FR1=%FR%
+call Fn.11 "%N1%" ":" && if not "%~x1"=="" &; set "message=Abort '%function%': wrong comma, use dot for decimals. Check '%~1'" && goto :eof
 if not %N1:~-1,1%==k if not %N1:~-1,1%==m if not %N1:~-1,1%==g |; if not /i "%N1:~0,2%"=="pi" && if not /i "%N1:~-3,2%"=="pi" && if not /i "%N1:~0,1%"=="e" && if not /i "%N1:~-2,1%"=="e" && set N1=%N1:~0,-1% && set N1kmg=%N1:~-1,1% ! set d1kmg=%N1:~-1,1% && set N1=%N1:~0,-1%
-if /i "%N1:~0,2%"=="pi" &; set N1=3 && set decimal1=141592653589793238 && set numdeci1=18 && set epi1=Y
-if /i "%N1:~-2,2%"=="pi" && if not "%N1:~0,2%"=="pi" &; setlocal && call :* * "%N1:~0,-2%" "3.141592653589793238" &; call :splitnumber "%result%" &; if exist message && endlocal && set "message=%message%" && goto :eof ! endlocal && set N1=%N% && set decimal1=%decimals% && set numdeci1=%numdecis% && set epi1=Y
-if /i "%N1:~0,1%"=="e" &; set N1=2 && set decimal1=718281828459045235 && set numdeci1=18 && set epi1=Y
-if /i "%N1:~-1,1%"=="e" && if not "%N1:~0,1%"=="e" &; setlocal && call :* * "%N1:~0,-1%" "2.718281828459045235" &; call :splitnumber "%result%" &; if exist message && endlocal && set "message=%message%" && goto :eof ! endlocal && set N1=%N% && set decimal1=%decimals% && set numdeci1=%numdecis% && set epi1=Y
+if /i "%N1%"=="pi" &; set N1=1 && set epi1=pi
+if /i "%N1:~-2,2%"=="pi" && set N1=%N1:~0,-2% && set epi1=pi
+if /i "%N1%"=="e" &; set N1=1 && set epi1=e
+if /i "%N1:~-1,1%"=="e" && set N1=%N1:~0,-1% && set epi1=e
+call Fn.11 "%N1%" ":" &; call call Fn.11 "%^N1%" "-" && set bad=- ! call call Fn.11 "%^N1%" "k" && set bad=k ! call call Fn.11 "%^N1%" "m" && set bad=m ! call call Fn.11 "%^N1%" "g" && set bad=g ! call call Fn.11 "%^N1%" "!" && set bad=! ! call call Fn.11 "%^N1%" "r" && set bad=r ! call call Fn.11 "%^N1%" "mr" && set bad=mr ! call call Fn.11 "%^N1%" "e" && set bad=e ! call call Fn.11 "%^N1%" "pi" && set bad=pi &; if exist bad && set "message=Bad input: '%bad%' not allowed inside fraction '%N1%'" && goto :eof
+call Fn.11 "%N1%" ":" &; setlocal && set FR=%N1% &; call :fraction2decimal fraction "%FR%" &; if exist N1kmg && call :* * "%result%" "1%N1kmg%" ! set N1kmg= &; call :splitnumber "%result%" &; if exist message && endlocal && set "message=%message%" && goto :eof ! endlocal && set N1=%N% && set decimal1=%decimals% && set numdeci1=%numdecis% && set FR1=%FR% && set N1kmg=
 call Fn.11 "%~1" "," && set N1=%N1%%%N1kmg% ! set N1=%N1%%%N1kmg% &; set /a N1len=%@retval%
-#TEST#
 debug msg=1 ;; if exist N1 && calc %N1% | set calc= ;; debug msg=0 ;; if exist N1 && if not exist calc && set "message=Operation '%function%' out of range, check first number '%~1'" && goto :eof ! if exist N1 && if "%calc:~0,1%"=="-" && set "message=Operation '%function%' out of range, check first number '%~1'" && set calc= && goto :eof ! set calc=
-#org2#if not "%N1:~0,2%"=="0x" && if not %N1len%<=18 &; if %N1len%==19 && if %N1:~0,1%==9 && if not %N1:~1%<=223372036854775807 && set "message=Operation '%function%' out of range, check first number '%~1'" && goto :eof ! if not %N1len%<=19 && set "message=Operation '%function%' out of range, check first number '%~1'" && goto :eof
-#ORG#if not "%N1:~0,2%"=="0x" && if not %N1len%<=18 &; if %N1len%==19 && if %N1:~0,1%==9 && if not %N1:~1%<=223372036854775807 && set "message=Operator '%function%' out of range, check first number '%~1'" && goto :eof ! if not %N1len%<=19 && set "message=Operator '%function%' out of range, check first number '%~1'" && goto :eof
 if "%N1:~0,2%"=="0x" && if not %N1len%<=17 &; if %N1len%==18 && if not %N1:~2,1%<=7 && set "message=Operation '%function%' out of range, check first number '%~1'" && goto :eof ! if not %N1len%<=18 && set "message=Operation '%function%' out of range, check first number '%~1'" && goto :eof
 call Fn.11 "%N1%" "+" && set "message=Abort '%function%': bad input, check '%~1'" && goto :eof
 call Fn.11 "%N1%" "-" && set "message=Abort '%function%': bad input, check '%~1'" && goto :eof
 if not %N1%==0 && set /a N1=%N1% &; if %N1%==0 && set "message=Abort '%function%': bad input in '%~1'" && goto :eof
+if %epi1%==pi &; setlocal &; if exist decimal1 && call :* * "%N1%.%decimal1%" "3.141592653589793238" ! call :* * "%N1%" "3.141592653589793238" &; call :splitnumber "%result%" &; if exist message && endlocal && set "message=%message%" && goto :eof ! endlocal && set N1=%N% && set decimal1=%decimals% && set numdeci1=%numdecis% && set epi1=Y
+if %epi1%==e &; setlocal &; if exist decimal1 && call :* * "%N1%.%decimal1%" "2.718281828459045235" ! call :* * "%N1%" "2.718281828459045235" &; call :splitnumber "%result%" &; if exist message && endlocal && set "message=%message%" && goto :eof ! endlocal && set N1=%N% && set decimal1=%decimals% && set numdeci1=%numdecis% && set epi1=Y
 set N1=%N1% &; set /a N1len=%@retval%
-if not %epi1%==Y && if not exist FR1 && set decimal1=%~x1 &; if not exist decimal1 && set numdeci1=0 ! if "%decimal1%"=="." && set decimal1= && set numdeci1=0 ! set decimal1=%decimal1:~1%
+if not %epi1%==Y && if not exist FR1 && set /l decimal1=%~x1 &; if not exist decimal1 && set numdeci1=0 ! if "%decimal1%"=="." && set decimal1= && set numdeci1=0 ! set decimal1=%decimal1:~1%
 if exist decimal1 &; if not %decimal1:~-1,1%==k if not %decimal1:~-1,1%==m if not %decimal1:~-1,1%==g |; set decimal1=%decimal1:~0,-1% && set d1kmg=%decimal1:~-1,1% &; if exist N1kmg && set "message=Operation '%function%' not allowed, check first number '%~1'" && goto :eof
 if exist decimal1 &; if %decimal1:~-1,1%==e && set decimal1=%decimal1:~0,-1% && set d1epi=2.718281828459045235 ! if %decimal1:~-2,2%==pi && set decimal1=%decimal1:~0,-2% && set d1epi=3.141592653589793238 &; if exist epi1 && set "message=Operation '%function%' not allowed, check first number '%~1'" && goto :eof
 if exist decimal1 && call Fn.11 "%decimal1%" "+" && set "message=Abort '%function%': bad input, check '%~1'" && goto :eof
 if exist decimal1 && call Fn.11 "%decimal1%" "-" && set "message=Abort '%function%': bad input, check '%~1'" && goto :eof
 if exist decimal1 &; if %decimal1%==0 && set decimal1= && set numdeci1=0 ! call Fn.11 "%decimal1%" "G" && set "message=Abort '%function%': bad input in '%~1'" && goto :eof ! call Fn.11 "%decimal1%" "g" && set "message=Abort '%function%': bad input in '%~1'" && goto :eof ! call Fn.11 "%decimal1%" "M" && set "message=Abort '%function%': bad input in '%~1'" && goto :eof ! call Fn.11 "%decimal1%" "m" && set "message=Abort '%function%': bad input in '%~1'" && goto :eof ! call Fn.11 "%decimal1%" "K" && set "message=Abort '%function%': bad input in '%~1'" && goto :eof ! call Fn.11 "%decimal1%" "k" && set "message=Abort '%function%': bad input in '%~1'" && goto :eof
-#TEST#
-#BAD#debug msg=1 ;; #BAD#if exist decimal1 && calc %decimal1% | set calc= ;; #BAD#debug msg=0 ;; #BAD#if exist decimal1 && if not exist calc && echo Abort '%function%': bad input in '%~1' && set "message=Abort '%function%': bad input in '%~1'" && goto :eof ! set calc=
-#BAD#if exist decimal1 && calc %decimal1% || echo Abort '%function%': bad input in '%~1' && set "message=Abort '%function%': bad input in '%~1'" && goto :eof
 if exist decimal1 && set decimal1=%decimal1:~0,18% &; set /a numdeci1=%@retval% && if %decimal1:~-1,1%==0 && if not exist fix && call :stripzerosafter "%decimal1%" &; set decimal1=%result% && set result= &; if exist decimal1 && set decimal1=%decimal1% &; set /a numdeci1=%@retval%
 if not exist decimal1 && set numdeci1=0
-if exist d1kmg &; setlocal && set kmg=%d1kmg% && set d1kmg= &; call :* * "%N1%.%decimal1%" "1%kmg%" &; call :splitnumber "%result%" &; if exist message && endlocal && set "message=%message%" && goto :eof ! endlocal && set N1=%N% && set decimal1=%decimals% && set numdeci1=%numdecis% && set d1kmg=%d1kmg%
 if exist d1epi &; setlocal && set epi=%d1epi% && set d1epi= &; call :* * "%N1%.%decimal1%" "%epi%" &; call :splitnumber "%result%" &; if exist message && endlocal && set "message=%message%" && goto :eof ! endlocal && set N1=%N% && set decimal1=%decimals% && set numdeci1=%numdecis% && set d1epi=%d1epi%
+if exist d1kmg &; setlocal && set kmg=%d1kmg% && set d1kmg= &; call :* * "%N1%.%decimal1%" "1%kmg%" &; call :splitnumber "%result%" &; if exist message && endlocal && set "message=%message%" && goto :eof ! endlocal && set N1=%N% && set decimal1=%decimals% && set numdeci1=%numdecis% && set d1kmg=%d1kmg%
 set epi1= && if "%~2"=="" && goto :eof
-set N2=%~n2 &; if "%N2:~0,2%"=="--" && set N2=%N2:~2% && set sign2=1 ! if "%N2:~0,2%"=="+-" && set N2=%N2:~2% && set sign2=-1 ! if "%N2:~0,2%"=="-+" && set N2=%N2:~2% && set sign2=-1 ! if "%N2:~0,2%"=="++" && set N2=%N2:~2% && set sign2=1 ! if "%N2:~0,1%"=="-" && set N2=%N2:~1% && set sign2=-1 ! if "%N2:~0,1%"=="+" && set N2=%N2:~1% && set sign2=1 ! set N2=%N2% && set sign2=1
+set /l N2=%~n2 &; if %N2:~-1,1%==: && set "message=Bad input: no operators or +/- possible inside fractions, check '%N2%'" && goto :eof ! if "%N2:~0,2%"=="--" && set N2=%N2:~2% && set sign2=1 ! if "%N2:~0,2%"=="+-" && set N2=%N2:~2% && set sign2=-1 ! if "%N2:~0,2%"=="-+" && set N2=%N2:~2% && set sign2=-1 ! if "%N2:~0,2%"=="++" && set N2=%N2:~2% && set sign2=1 ! if "%N2:~0,1%"=="-" && set N2=%N2:~1% && set sign2=-1 ! if "%N2:~0,1%"=="+" && set N2=%N2:~1% && set sign2=1 ! set N2=%N2% && set sign2=1
 if not exist N2 && set N2=0 && set N2len=0 ! if "%N2:~0,2%"=="0x" && if %N2:~2%==0 && set N2=0 && set N2len=0
 if not %N2%==0 && call :stripzerosbefore "%N2%" &; if exist result && set N2=%result% &; set /a N2len=%@retval% && set result=
 if "%N2:~0,2%"=="0x" && call Fn.11 "%N2%" "," &; set "message=Abort '%function%': wrong comma, use dot for decimals. Check '%~2'" && goto :eof
@@ -194,34 +194,30 @@ call Fn.11 "%N2%" "," && if %N2len%>=5 &; if %N2:~-4,1%==, && set N2=%N2:~0,-4%%
 call Fn.11 "%N2%" "," &; set "message=Abort '%function%': wrong comma, use dot for decimals. Check '%~2'" && goto :eof
 call Fn.11 "%N2%" "+" && set "message=Abort '%function%': bad input, check '%~2'" && goto :eof
 call Fn.11 "%N2%" "-" && set "message=Abort '%function%': bad input, check '%~2'" && goto :eof
-call Fn.11 "%N2%" ":" &; setlocal && set FR=%N2% &; call :fraction2decimal fraction "%FR%" &; call :splitnumber "%result%" &; if exist message && endlocal && set "message=%message%" && goto :eof ! endlocal && set N2=%N% && set decimal2=%decimals% && set numdeci2=%numdecis% && set FR2=%FR%
+call Fn.11 "%N2%" ":" && if not "%~x2"=="" &; set "message=Abort '%function%': bad input, check '%~2'" && goto :eof
 if not %N2:~-1,1%==k if not %N2:~-1,1%==m if not %N2:~-1,1%==g |; if not /i "%N2:~0,2%"=="pi" && if not /i "%N2:~-3,2%"=="pi" && if not /i "%N2:~0,1%"=="e" && if not /i "%N2:~-2,1%"=="e" && set N2=%N2:~0,-1% && set N2kmg=%N2:~-1,1% ! set d2kmg=%N2:~-1,1% && set N2=%N2:~0,-1%
-if /i "%N2:~0,2%"=="pi" &; set N2=3 && set decimal2=141592653589793238 && set numdeci2=18 && set epi2=Y
-if /i "%N2:~-2,2%"=="pi" && if not "%N2:~0,2%"=="pi" &; setlocal && call :* * "%N2:~0,-2%" "3.141592653589793238" &; call :splitnumber "%result%" &; if exist message && endlocal && set "message=%message%" && goto :eof ! endlocal && set N2=%N% && set decimal2=%decimals% && set numdeci2=%numdecis% && set epi2=Y
-if /i "%N2:~0,1%"=="e" &; set N2=2 && set decimal2=718281828459045235 && set numdeci2=18 && set epi2=Y
-if /i "%N2:~-1,1%"=="e" && if not "%N2:~0,1%"=="e" &; setlocal && call :* * "%N2:~0,-1%" "2.718281828459045235" &; call :splitnumber "%result%" &; if exist message && endlocal && set "message=%message%" && goto :eof ! endlocal && set N2=%N% && set decimal2=%decimals% && set numdeci2=%numdecis% && set epi2=Y
-call Fn.11 "%~1" "," && set N2=%N2%%%N2kmg% ! set N2=%N2%%%N2kmg% &; set /a N2len=%@retval%
-#TEST#
+if /i "%N2%"=="pi" &; set N2=1 && set epi2=pi
+if /i "%N2:~-2,2%"=="pi" && set N2=%N2:~0,-2% && set epi2=pi
+if /i "%N2%"=="e" &; set N2=1 && set epi2=e
+if /i "%N2:~-1,1%"=="e" && set N2=%N2:~0,-1% && set epi2=e
+call Fn.11 "%N2%" ":" &; call call Fn.11 "%^N2%" "-" && set bad=- ! call call Fn.11 "%^N2%" "k" && set bad=k ! call call Fn.11 "%^N2%" "m" && set bad=m ! call call Fn.11 "%^N2%" "g" && set bad=g ! call call Fn.11 "%^N2%" "!" && set bad=! ! call call Fn.11 "%^N2%" "r" && set bad=r ! call call Fn.11 "%^N2%" "mr" && set bad=mr ! call call Fn.11 "%^N2%" "e" && set bad=e ! call call Fn.11 "%^N2%" "pi" && set bad=pi &; if exist bad && set "message=Bad input: '%bad%' not allowed inside fraction '%N2%'" && goto :eof
+call Fn.11 "%N2%" ":" &; setlocal && set FR=%N2% &; call :fraction2decimal fraction "%FR%" &; if exist N2kmg && call :* * "%result%" "1%N2kmg%" ! set N2kmg= &; call :splitnumber "%result%" &; if exist message && endlocal && set "message=%message%" && goto :eof ! endlocal && set N2=%N% && set decimal2=%decimals% && set numdeci2=%numdecis% && set FR2=%FR% && set N2kmg=
+call Fn.11 "%~2" "," && set N2=%N2%%%N2kmg% ! set N2=%N2%%%N2kmg% &; set /a N2len=%@retval%
 debug msg=1 ;; if exist N2 && calc %N2% | set calc= ;; debug msg=0 ;; if exist N2 && if not exist calc && set "message=Operation '%function%' out of range, check first number '%~2'" && goto :eof ! if exist N2 && if "%calc:~0,1%"=="-"  && set "message=Operation '%function%' out of range, check first number '%~2'" && set calc= && goto :eof ! set calc=
-#org2#if not "%N2:~0,2%"=="0x" && if not %N2len%<=18 &; if %N2len%==19 && if %N2:~0,1%==9 && if not %N2:~1%<=223372036854775807 && set "message=Operation '%function%' out of range, check second number '%~2'" && goto :eof ! if not %N2len%<=19 && set "message=Operation '%function%' out of range, check second number '%~2'" && goto :eof
-#ORG#if "%N2:~0,2%"=="0x" && if not %N2len%<=17 &; if %N2len%==18 && if not %N2:~2,1%<=7 && set "message=Operator '%function%' out of range, check second number '%~2'" && goto :eof ! if not %N2len%<=18 && set "message=Operator '%function%' out of range, check second number '%~2'" && goto :eof
 if not %N2%==0 && set /a N2=%N2% &; if %N2%==0 && set "message=Abort '%function%': bad input in '%~2'" && goto :eof
+if %epi2%==pi &; setlocal &; if exist decimal2 && call :* * "%N2%.%decimal2%" "3.141592653589793238" ! call :* * "%N2%" "3.141592653589793238" &; call :splitnumber "%result%" &; if exist message && endlocal && set "message=%message%" && goto :eof ! endlocal && set N2=%N% && set decimal2=%decimals% && set numdeci2=%numdecis% && set epi2=Y
+if %epi2%==e &; setlocal && if exist decimal2 && call :* * "%N2%.%decimal2%" "2.718281828459045235" ! call :* * "%N2%" "2.718281828459045235" &; call :splitnumber "%result%" &; if exist message && endlocal && set "message=%message%" && goto :eof ! endlocal && set N2=%N% && set decimal2=%decimals% && set numdeci2=%numdecis% && set epi2=Y
 set N2=%N2% &; set /a N2len=%@retval%
-if not %epi2%==Y && if not exist FR2 && set decimal2=%~x2 &; if not exist decimal2 && set numdeci2=0 && goto :eof ! if "%decimal2%"=="." && set decimal2= && set numdeci2=0 ! set decimal2=%decimal2:~1%
+if not %epi2%==Y && if not exist FR2 && set /l decimal2=%~x2 &; if not exist decimal2 && set numdeci2=0 && goto :eof ! if "%decimal2%"=="." && set decimal2= && set numdeci2=0 ! set decimal2=%decimal2:~1%
 if not %decimal2:~-1,1%==k if not %decimal2:~-1,1%==m if not %decimal2:~-1,1%==g |; set decimal2=%decimal2:~0,-1% && set d2kmg=%decimal2:~-1,1% &; if exist N2kmg && set "message=Operation '%function%' not allowed, check second number '%~2'" && goto :eof
 if exist decimal2 &; if %decimal2:~-1,1%==e && set decimal2=%decimal2:~0,-1% && set d2epi=2.718281828459045235 ! if %decimal2:~-2,2%==pi && set decimal2=%decimal2:~0,-2% && set d2epi=3.141592653589793238 &; if exist epi2 && set "message=Operation '%function%' not allowed, check first number '%~1'" && goto :eof
 if exist decimal2 && call Fn.11 "%decimal2%" "+" && set "message=Abort '%function%': bad input, check '%~2'" && goto :eof
 if exist decimal2 && call Fn.11 "%decimal2%" "-" && set "message=Abort '%function%': bad input, check '%~2'" && goto :eof
 if exist decimal2 &; if %decimal2%==0 && set decimal2= && set numdeci2=0 ! call Fn.11 "%decimal2%" "G" && set "message=Abort '%function%': bad input in '%~2'" && goto :eof ! call Fn.11 "%decimal2%" "g" && set "message=Abort '%function%': bad input in '%~2'" && goto :eof ! call Fn.11 "%decimal2%" "M" && set "message=Abort '%function%': bad input in '%~2'" && goto :eof ! call Fn.11 "%decimal2%" "m" && set "message=Abort '%function%': bad input in '%~2'" && goto :eof ! call Fn.11 "%decimal2%" "K" && set "message=Abort '%function%': bad input in '%~2'" && goto :eof ! call Fn.11 "%decimal2%" "k" && set "message=Abort '%function%': bad input in '%~2'" && goto :eof
-#TEST#
-#BAD#debug msg=1 ;; #BAD#if exist decimal2 && calc %decimal2% | set calc= ;; #BAD#debug msg=0 ;; #BAD#if exist decimal2 && if not exist calc && echo Abort '%function%': bad input in '%~2' && set "message=Abort '%function%': bad input in '%~2'" && goto :eof ! set calc=
-#BAD#if exist decimal2 && calc %decimal2% || set "message=Abort '%function%': bad input in '%~2'" && goto :eof
-#BAD# ! calc %decimal2% || set "message=Abort '%function%': bad input in '%~2'" && goto :eof
 if exist decimal2 && set decimal2=%decimal2:~0,18% &; set /a numdeci2=%@retval% && if %decimal2:~-1,1%==0 && if not exist fix && call :stripzerosafter "%decimal2%" &; set decimal2=%result% && set result= &; if exist decimal2 && set decimal2=%decimal2% &; set /a numdeci2=%@retval%
-#BUG#if exist decimal2 && set decimal2=%decimal2:~0,18% &; set /a numdeci2=%@retval% && if %decimal2:~-1,1%==0 && if not exist fix && call :stripzerosafter "%decimal1%" &; set decimal1=%result% && set result= &; if exist decimal1 && set decimal1=%decimal1% &; set /a numdeci1=%@retval%
 if not exist decimal2 && set numdeci2=0
-if exist d2kmg &; setlocal && set kmg=%d2kmg% && set d2kmg= &; call :* * "%N2%.%decimal2%" "1%kmg%" &; call :splitnumber "%result%" &; if exist message && endlocal && set "message=%message%" && goto :eof ! endlocal && set N2=%N% && set decimal2=%decimals% && set numdeci2=%numdecis% && set d2kmg=%d2kmg%
 if exist d2epi &; setlocal && set epi=%d2epi% && set d2epi= &; call :* * "%N2%.%decimal2%" "%epi%" &; call :splitnumber "%result%" &; if exist message && endlocal && set "message=%message%" && goto :eof ! endlocal && set N2=%N% && set decimal2=%decimals% && set numdeci2=%numdecis% && set d2epi=%d2epi%
+if exist d2kmg &; setlocal && set kmg=%d2kmg% && set d2kmg= &; call :* * "%N2%.%decimal2%" "1%kmg%" &; call :splitnumber "%result%" &; if exist message && endlocal && set "message=%message%" && goto :eof ! endlocal && set N2=%N% && set decimal2=%decimals% && set numdeci2=%numdecis% && set d2kmg=%d2kmg%
 set epi2= && goto :eof
 ::
 :endlocal
@@ -232,7 +228,6 @@ goto :eof
 setlocal && set * && set rounded=%rounded% && set MR=%MR% && set lastrnd=%lastrnd% && set memrnd=%memrnd% && set R=%R% && set fix=%fix%
 shift
 set n1=%~1 &; if /i %n1:~-2,2%==mr && set n1=%n1:~0,-2%%%MR% && set lastrnd=%memrnd% ! if /i %n1%==r && set n1=%R% ! if /i %n1%==-r && set n1=-%R% ! if /i %n1:~-3,3%==mr! && set n1=%n1:~0,-3%%%MR%! && set lastrnd=
-call Fn.11 "%n1%" ":" &; call :fraction2decimal fraction "%n1%" &; goto :endlocal
 if /i "%n1:~-1,1%"=="!" && set n1=%n1:~0,-1% &; if %n1:~0,1%==- && set n1=%n1:~1% && set sign=- ! set sign= &; call :fact goback %n1% &; if exist result && set n1=%sign%%%result% && set result= ! set rounded= && goto :endlocal
 call :operatorsinput %0 "%n1%" &; if exist message && goto :endlocal
 if %sign1%==-1 && set sign=-
@@ -391,7 +386,7 @@ set SumEp9=0000000000%SumEp9%
 set N1N2p9=%SumEp9:~-10,10%
 if %N1N2p9%==0 && set N1N2p9=
 endlocal && set N1N2p9=%N1N2p9%
-#NOTNEEDEDNOW#Above 10Exp18
+#NOTNEEDEDNOW#Above 10exp18
 ##setlocal
 ##set /a N1CN2A=%N1C% * %N2A%
 ##set /a N2CN1A=%N2C% * %N1A%
@@ -632,8 +627,8 @@ endlocal && set N=%N% && set decimals=%decimals% && set numdecis=%numdecis%
 goto :eof
 ::
 :^
-#-#+ ^ \tOperator  ^ : Decimal exponentation of base number1 and power number2
-#-# Use\tCALCD.G4B [switch] number1 ^ number2\nRemarks\tInfix operator, existing result can be used instead of number1\n\tNegative exponent and/ or decimals in exponent supported\n\tNegative base allowed, except with decimals in exponent!\n\tInternally 73 digits, 19th decimal is used for rounding\n\tHighest base: 3,037,000,499.976049692286752403 (power: 2)\nExample CALCD.G4B 2 ^ 8\nExample CALCD.G4B -2 ^ 8\nExample CALCD.G4B 1.02 ^ 35\nExample CALCD.G4B 5.0512 ^ 2\nExample CALCD.G4B -3 ^ 3\nExample CALCD.G4B 0.0123456789 ^ 5\nExample CALCD.G4B 1k ^ 6 THSEP\nExample CALCD.G4B 1.0123456789 ^ 3,558 THSEP\nExample CALCD.G4B 3,037,000,499.976049692286752403 ^ 2 HEX\nExample CALCD.G4B 3,037,000,499.976049692286752403 ^ 2 ROUND 0 HEX\nExample CALCD.G4B --echoR 0.0123456789^5MS0.0123456789^4MNMR\nExample CALCD.G4B -3 ^ -3\nExample CALCD.G4B 0.3 ^ 0.3
+#-#+ ^ \tOperator  ^ : Decimal exponentiation of base number1 and power number2
+#-# Use\tCALCD.G4B [switch] number1 ^ number2\nRemarks\tInfix operator, existing result can be used instead of number1\n\tNegative exponent and/ or decimals/ fractions in exponent supported\n\tNegative base allowed, except with decimals in exponent!\n\tInternally 73 digits, 19th decimal is used for rounding\n\tHighest base: 3,037,000,499.976049692286752403 (power: 2)\nExample CALCD.G4B 2 ^ 8\nExample CALCD.G4B -2 ^ 8\nExample CALCD.G4B 1.02 ^ 35\nExample CALCD.G4B 5.0512 ^ 2\nExample CALCD.G4B 0.0123456789 ^ 5\nExample CALCD.G4B 1k ^ 6 THSEP\nExample CALCD.G4B 1.0123456789 ^ 3,558 THSEP\nExample CALCD.G4B 3,037,000,499.976049692286752403 ^ 2 HEX\nExample CALCD.G4B 3,037,000,499.976049692286752403 ^ 2 ROUND 0 HEX\nExample CALCD.G4B --echoR 0.0123456789^5MS0.0123456789^4MNMR\nExample CALCD.G4B -3 ^ -3\nExample CALCD.G4B 0.3 ^ 0.3\nExample CALCD.G4B 1:3piMS 1:3pi^3/3!MN 1:3pi^5/5!MP 1:3pi^7/7!MN\n\t\t   1:3pi^9/9!MP1:3pi^11/11!MN 1:3pi^13/13!MP\nExample CALCD.G4B 1MS 1:3pi^2*3/3!MN 1:3pi^4*5/5!MP 1:3pi^6*7/7!MN\n\t\t   1:3pi^8*9/9!MP 1:3pi^10*11/11!MN 1:3pi^12*13/13!MP
 setlocal && set * && set rounded=%rounded% && set MR=%MR% && set lastrnd=%lastrnd% && set memrnd=%memrnd% && set R=%R% && set fix=%fix%
 if "%~3"=="" && set "message=Abort: argument(s) missing in %0" && goto :endlocal
 if /i "%~1"=="noround" && set noround=Y && set lastrnd= ! set noround=N
@@ -773,8 +768,8 @@ set /a SumEp18=%N1B2B% + %N1CN2A% + %N2CN1A% + %SE9p9%
 set SumEp18=000000000%SumEp18%
 set N1N2p18=%SumEp18:~-9,9% && set /a SE18p9=%SumEp18:~0,-9%
 endlocal && set N1N2p18=%N1N2p18% && set SE18p9=%SE18p9% && set SE9p9=
-if not %N1N2p18%<=9 && set "message=Exponentation out of range" && goto :endlocal
-if not %N1N2p18%<=9223372036 && if not %N1N2p9%<=854775807 && set "message=Exponentation out of range" && goto :endlocal
+if not %N1N2p18%<=9 && set "message=Exponentiation out of range" && goto :endlocal
+if not %N1N2p18%<=9223372036 && if not %N1N2p9%<=854775807 && set "message=Exponentiation out of range" && goto :endlocal
 set /a power=%power% - 1 &; if %power%>=2 && set N1C=%N1N2p18% && set N1N2p18= && set N1B=%N1N2p9% && set N1N2p9= && set N1A=%N1N2p0% && set N1N2p0= && set d1A=%d1d2m9% && set d1d2m9= && set d1B=%d1d2m18% && set d1d2m18= && set d1C=%d1d2m27% && set d1d2m27= && set d1D=%d1d2m36% && set d1d2m36= && set d1E=%d1d2m45% && set d1d2m45= && goto :calcpowerloop
 if not %d1d2m54%==0 && set rounded=Y ! if not %d1d2m45%==0 && set rounded=Y ! if not %d1d2m36%==0 && set rounded=Y ! if not %d1d2m27%==0 && set rounded=Y
 if %d1d2m18%==0 && set d1d2m18=
@@ -789,12 +784,12 @@ set resdec=%resdec:~0,18%
 if %resint%>=1 && call :stripzerosbefore "%resint%" &; set resint=%result% && set result=
 goto :calcpowerloopend
 :calcpowerloop2
-if not %N1N2%<=0x7FFFFFFFFFFFFFFF && set "message=Exponentation out of range" && goto :endlocal
-if %N1%>=0x4000000000000000 && set "message=Exponentation out of range" && goto :endlocal
-set /a N1N2=%N1% * %N2% &; if %N1%>=0 && if %N1N2%<=0 && set "message=Exponentation out of range" && goto :endlocal
+if not %N1N2%<=0x7FFFFFFFFFFFFFFF && set "message=Exponentiation out of range" && goto :endlocal
+if %N1%>=0x4000000000000000 && set "message=Exponentiation out of range" && goto :endlocal
+set /a N1N2=%N1% * %N2% &; if %N1%>=0 && if %N1N2%<=0 && set "message=Exponentiation out of range" && goto :endlocal
 set /a power=%power% - 1 &; if %power%>=2 && set N1=%N1N2% && goto :calcpowerloop2 ! set resint=%N1N2%
 :calcpowerloopend
-if not %resint%<=0x7FFFFFFFFFFFFFFF && set "message=Exponentation out of range" && goto :endlocal
+if not %resint%<=0x7FFFFFFFFFFFFFFF && set "message=Exponentiation out of range" && goto :endlocal
 if exist resdec && if not exist fix && if %noround%==N && call :stripzerosafter "%resdec%" &; set resdeci=%result% && set result=
 if "%sign1%"=="-1" && set sign=- &; calc %orgpower% % 2 || set sign=
 if not exist resdec && if not %rounded%==Y && set result=%sign%%%resint% ! if exist resdec && set result=%sign%%%resint%.%resdec% ! set result=%sign%%%resint%
@@ -1156,7 +1151,7 @@ goto :calcfpend
 ::
 :"=="
 #-#+ == \tFunction "==" - Compare if number1 and number2 are equal
-#-# Use \tCALCD.G4B "==" number1 number2\nRemarks If number1==number2 - result=1, if not result=0\n\tDouble qoutes mandatory in "=="\nExample CALCD.G4B "==" 1 1\nExample CALCD.G4B "==" 1 0\nExample CALCD.G4B "==" 1.1 1.20000000\nExample CALCD.G4B "==" -1 -1\nExample CALCD.G4B "==" -.2 -.20000000\nExample CALCD.G4B 8! MS "==" MR 7!\nExample CALCD.G4B "==" 0x1000 0x1000.0001\nExample CALCD.G4B "==" 1,000 1000\nExample CALCD.G4B "==" 2.11 1.11\x20;;\x20if %result%==1\x20&&\x20CALCD.G4B 2.11 + 1.11\n\t\t  \x20!\x20CALCD.G4B 2.11 - 1.11
+#-# Use \tCALCD.G4B "==" number1 number2\nRemarks If number1==number2 - result=1, if not result=0\n\tDouble qoutes AND spaces around mandatory in "=="\nExample CALCD.G4B "==" 1 1\nExample CALCD.G4B "==" 1 0\nExample CALCD.G4B "==" 1.1 1.20000000\nExample CALCD.G4B "==" -1 -1\nExample CALCD.G4B "==" -.2 -.20000000\nExample CALCD.G4B 8! MS "==" MR 7!\nExample CALCD.G4B "==" 0x1000 0x1000.0001\nExample CALCD.G4B "==" 1,000 1000\nExample CALCD.G4B "==" 2.11 1.11\x20;;\x20if %result%==1\x20&&\x20CALCD.G4B 2.11 + 1.11\n\t\t  \x20!\x20CALCD.G4B 2.11 - 1.11
 setlocal && set * && set rounded=%rounded% && set MR=%MR% && set lastrnd=%lastrnd% && set memrnd=%memrnd% && set R=%R%
 if "%~3"=="" && set "message=Abort: argument(s) missing in %0" && goto :endlocal
 shift
@@ -1175,7 +1170,7 @@ goto :eof
 ::
 :">="
 #-#+ >= \tFunction ">=" - Compare if number1 is greater or equal than number2
-#-# Use \tCALCD.G4B ">=" number1 number2\nRemarks If number1>=number2 - result=1, if not result=0\n\tDouble qoutes mandatory in ">="\nExample CALCD.G4B ">=" 1 1\nExample CALCD.G4B ">=" 1 0\nExample CALCD.G4B ">=" 1.2 1.10000000\nExample CALCD.G4B ">=" -1 -1\nExample CALCD.G4B ">=" -.1 -.20000000\nExample CALCD.G4B 8! MS ">=" MR 7!\nExample CALCD.G4B ">=" 0x1000 0x1000.0001\nExample CALCD.G4B ">=" 1,001 1000\nExample CALCD.G4B ">=" 2.11 1.11\x20;;\x20if %result%==1\x20&&\x20CALCD.G4B 2.11 + 1.11\n\t\t  \x20!\x20CALCD.G4B 2.11 - 1.11
+#-# Use \tCALCD.G4B ">=" number1 number2\nRemarks If number1>=number2 - result=1, if not result=0\n\tDouble qoutes AND spaces around mandatory in ">="\nExample CALCD.G4B ">=" 1 1\nExample CALCD.G4B ">=" 1 0\nExample CALCD.G4B ">=" 1.2 1.10000000\nExample CALCD.G4B ">=" -1 -1\nExample CALCD.G4B ">=" -.1 -.20000000\nExample CALCD.G4B 8! MS ">=" MR 7!\nExample CALCD.G4B ">=" 0x1000 0x1000.0001\nExample CALCD.G4B ">=" 1,001 1000\nExample CALCD.G4B ">=" 2.11 1.11\x20;;\x20if %result%==1\x20&&\x20CALCD.G4B 2.11 + 1.11\n\t\t  \x20!\x20CALCD.G4B 2.11 - 1.11
 setlocal && set * && set rounded=%rounded% && set MR=%MR% && set lastrnd=%lastrnd% && set memrnd=%memrnd% && set R=%R%
 if "%~3"=="" && set "message=Abort: argument(s) missing in %0" && goto :endlocal
 shift
@@ -1197,7 +1192,7 @@ goto :eof
 ::
 :"<="
 #-#+ <= \tFunction "<=" - Compare if number1 is smaller or equal than number2
-#-#  Use \tCALCD.G4B "<=" number1 number2\nRemarks If number1<=number2 - result=1, if not result=0\n\tDouble qoutes mandatory in "<="\nExample CALCD.G4B "<=" 1 1\nExample CALCD.G4B "<=" 1 0\nExample CALCD.G4B "<=" 1.1 1.20000000\nExample CALCD.G4B "<=" -1 -1\nExample CALCD.G4B "<=" -.1 -.20000000\nExample CALCD.G4B 8! MS "<=" MR 7!\nExample CALCD.G4B "<=" 0x1000 0x1000.0001\nExample CALCD.G4B "<=" 1,001 1000\nExample CALCD.G4B "<=" 2.11 1.11\x20;;\x20if %result%==1\x20&&\x20CALCD.G4B 2.11 + 1.11\n\t\t  \x20!\x20CALCD.G4B 2.11 - 1.11
+#-#  Use \tCALCD.G4B "<=" number1 number2\nRemarks If number1<=number2 - result=1, if not result=0\n\tDouble qoutes AND spaces around mandatory in "<="\nExample CALCD.G4B "<=" 1 1\nExample CALCD.G4B "<=" 1 0\nExample CALCD.G4B "<=" 1.1 1.20000000\nExample CALCD.G4B "<=" -1 -1\nExample CALCD.G4B "<=" -.1 -.20000000\nExample CALCD.G4B 8! MS "<=" MR 7!\nExample CALCD.G4B "<=" 0x1000 0x1000.0001\nExample CALCD.G4B "<=" 1,001 1000\nExample CALCD.G4B "<=" 2.11 1.11\x20;;\x20if %result%==1\x20&&\x20CALCD.G4B 2.11 + 1.11\n\t\t  \x20!\x20CALCD.G4B 2.11 - 1.11
 setlocal && set * && set rounded=%rounded% && set MR=%MR% && set lastrnd=%lastrnd% && set memrnd=%memrnd% && set R=%R%
 if "%~3"=="" && set "message=Abort: argument(s) missing in %0" && goto :endlocal
 shift
@@ -1582,7 +1577,7 @@ goto :calcfpend
 ::
 :countif
 #-#+ COUNTIF \tFunction COUNTIF  - Count of numbers behind satisfying 'if'-condition
-#-#  Use 1\tCALCD.G4B COUNTIF "==n"|"=>n"|"<=n"|">n"|"<n" number1 number2 [numbern]\nUse 2\tCALCD.G4B COUNTIF "==n"|"=>n"|"<=n"|">n"|"<n" [MD] FILE\nRemarks Prefix function, result can be used as input to infix or postfix\n\tfunctions. New prefix function restarts calculation\n\tFILE must be an md-device containing numbers only, max 255 sectors\n\tSeparators in FILE: spaces (20), 0A or 0D0A - MD optional\n\tn \xF110exp-18 - 2exp63-1, 0!-20!, MR, R (integers hex too, decimals: dot)\nExample CALCD.G4B COUNTIF "==3" 1 2 3 1 2 3\nExample CALCD.G4B COUNTIF ">=3" 1 2 3 4 5 6\nExample CALCD.G4B COUNTIF "<=1.5" 0.5 1.5 2.5 3.5 4.5 5.5 0.05\nExample CALCD.G4B COUNTIF ">=1k" 1,000 1010 0x3F2 1030 1,040 1k\nExample CALCD.G4B COUNTIF "<3!" 0! 1! 2! 3! 4! 5! 4! 3! 2! 1! 0!\nExample CALCD.G4B  5!MS COUNTIF "<=MR" 1! 2! 3! 4! MR 6! 7!*8!THSEP\nExample CALCD.G4B COUNTIF ">=3" 1 2 3 4 5 MS \x3B\x3B if \x25MR\x25>=4\x20&&\x20CALCD.G4B MR ^ MR\nMake FILE: echo 0.5 1.5 2.5 3.5 4.5 5.5 0.05\x20>\x20(md)0x3000+255\nExample CALCD.G4B COUNTIF "==3" (md)0x3000+255\nExample CALCD.G4B COUNTIF ">=3" (md)0x3000+255 ^ 2\nExample CALCD.G4B COUNTIF "<=5.49" (md)0x3000+255 MS \x3B\x3B if \x25MR\x25<=6 echo GOOD
+#-#  Use 1\tCALCD.G4B COUNTIF "==n"|"=>n"|"<=n"|">n"|"<n" number1 number2 [numbern]\nUse 2\tCALCD.G4B COUNTIF "==n"|"=>n"|"<=n"|">n"|"<n" [MD] FILE\nRemarks Prefix function, result can be used as input to infix or postfix\n\tfunctions. New prefix function restarts calculation\n\tFILE must be an md-device containing numbers only, max 255 sectors\n\tSeparators in FILE: spaces (20), 0A or 0D0A - MD optional\n\tSpaces around 'if'-condition mandatory!\n\tn \xF110exp-18 - 2exp63-1, 0!-20!, MR, R (integers hex too, decimals: dot)\nExample CALCD.G4B COUNTIF "==3" 1 2 3 1 2 3\nExample CALCD.G4B COUNTIF ">=3" 1 2 3 4 5 6\nExample CALCD.G4B COUNTIF "<=1.5" 0.5 1.5 2.5 3.5 4.5 5.5 0.05\nExample CALCD.G4B COUNTIF ">=1k" 1,000 1010 0x3F2 1030 1,040 1k\nExample CALCD.G4B COUNTIF "<3!" 0! 1! 2! 3! 4! 5! 4! 3! 2! 1! 0!\nExample CALCD.G4B  5!MS COUNTIF "<=MR" 1! 2! 3! 4! MR 6! 7!*8!THSEP\nExample CALCD.G4B COUNTIF ">=3" 1 2 3 4 5 MS \x3B\x3B if \x25MR\x25>=4\x20&&\x20CALCD.G4B MR ^ MR\nMake FILE: echo 0.5 1.5 2.5 3.5 4.5 5.5 0.05\x20>\x20(md)0x3000+255\nExample CALCD.G4B COUNTIF "==3" (md)0x3000+255\nExample CALCD.G4B COUNTIF ">=3" (md)0x3000+255 ^ 2\nExample CALCD.G4B COUNTIF "<=5.49" (md)0x3000+255 MS \x3B\x3B if \x25MR\x25<=6 echo GOOD
 if /i "%~1"=="countif" && shift ! set "message=Abort COUNTIF: wrong call" && set result= && goto :calcfpend
 setlocal && set * && set rounded=%rounded% && set MR=%MR% && set lastrnd=%lastrnd% && set memrnd=%memrnd% && set R=%R% && set fix=%fix%
 set "ARG=%~1" &; if "%ARG:~0,2%"=="==" && set "if===" && set C=%ARG:~2% ! if "%ARG:~0,2%"==">=" && set "if=>=" && set C=%ARG:~2% ! if "%ARG:~0,1%"==">" && set "if=>" && set C=%ARG:~1% ! if "%ARG:~0,2%"=="<=" && set "if=<=" && set C=%ARG:~2% ! if "%ARG:~0,1%"=="<" && set "if=<" && set C=%ARG:~1%
@@ -1715,10 +1710,10 @@ goto :calcfpend
 ::
 :log
 #-#+ LOG \tFunction LOG - Common logarithm of number before (base: 10)
-#-# Use\tCALCD.G4B number LOG\nRemarks\tPostfix function, existing result can be used instead of number\n\tHighest number: 9.223exp18 or 0x7FFFFFFFFFFFFFFF\n\tAccuracy: about 16 digits, small numbers (much) less\nExample CALCD.G4B 10 LOG\nExample CALCD.G4B 10 LOG DIGI 16\nExample CALCD.G4B 0.2555 LOG\nExample CALCD.G4B 0.1 LOG\nExample CALCD.G4B 0.1 LOG DIGI 5\nExample CALCD.G4B 0.02 LOG\nExample CALCD.G4B 0.02 LOG DIGI 2\nExample CALCD.G4B 2050.456 LOG\nExample CALCD.G4B 2,050.456 LOG\nExample CALCD.G4B 0.000000000123456789 LOG\nExample CALCD.G4B 256 LOG\nExample CALCD.G4B 256LOGMS 10LOG SRM/MR\nExample CALCD.G4B 3! LOG
+#-# Use\tCALCD.G4B number LOG\nRemarks\tPostfix function, existing result can be used instead of number\n\tHighest number: 9.223exp18 or 0x7FFFFFFFFFFFFFFF\n\tAccuracy: about 16 digits, small numbers less\nExample CALCD.G4B 10 LOG\nExample CALCD.G4B 10 LOG DIGI 16\nExample CALCD.G4B 0.2555 LOG\nExample CALCD.G4B 0.1 LOG\nExample CALCD.G4B 0.01 LOG\nExample CALCD.G4B 0.003 LOG\nExample CALCD.G4B 0.0003 LOG\nExample CALCD.G4B 2050.456 LOG\nExample CALCD.G4B 2,050.456 LOG\nExample CALCD.G4B 0.000000000123456789 LOG\nExample CALCD.G4B 256 LOG\nExample CALCD.G4B 256LOGMS 10LOG SRM/MR\nExample CALCD.G4B 3! LOG
 :ln
 #-#+ LN \tFunction LN - Natural logarithm of number before (base: e)
-#-# Use\tCALCD.G4B number LN\nRemarks\tPostfix function, existing result can be used instead of number\n\tHighest number: 9.223exp18 or 0x7FFFFFFFFFFFFFFF\n\tAccuracy: about 16 digits, small numbers (much) less\nExample CALCD.G4B e LN\nExample CALCD.G4B e LN DIGI 16\nExample CALCD.G4B 10 LN\nExample CALCD.G4B 0.2555 LN\nExample CALCD.G4B 0.1 LN\nExample CALCD.G4B 0.1 LN DIGI 5\nExample CALCD.G4B 0.02 LN\nExample CALCD.G4B 0.02 LN DIGI 2\nExample CALCD.G4B 2050.456 LN\nExample CALCD.G4B 2,050.456 LN\nExample CALCD.G4B 0.000000000123456789 LN\nExample CALCD.G4B 256 LN\nExample CALCD.G4B 256LNMS 10LN SRM/MR\nExample CALCD.G4B 3! LN
+#-# Use\tCALCD.G4B number LN\nRemarks\tPostfix function, existing result can be used instead of number\n\tHighest number: 9.223exp18 or 0x7FFFFFFFFFFFFFFF\n\tAccuracy: about 16 digits, small numbers less\nExample CALCD.G4B e LN\nExample CALCD.G4B e LN DIGI 16\nExample CALCD.G4B 10 LN\nExample CALCD.G4B 0.2555 LN\nExample CALCD.G4B 0.1 LN\nExample CALCD.G4B 0.1 LN\nExample CALCD.G4B 0.02 LN\nExample CALCD.G4B 0.02 LN\nExample CALCD.G4B 2050.456 LN\nExample CALCD.G4B 2,050.456 LN\nExample CALCD.G4B 0.000000000123456789 LN\nExample CALCD.G4B 256 LN\nExample CALCD.G4B 256LNMS 10LN SRM/MR\nExample CALCD.G4B 3! LN
 setlocal && set * && set rounded=%rounded% && set MR=%MR% && set lastrnd=%lastrnd% && set memrnd=%memrnd% && set R=%R% && set fix=%fix%
 set postfix=%~0 &; if /i %postfix%==:log && set log=Y
 if "%~1"=="goback" && set goback=Y && shift
@@ -1729,8 +1724,9 @@ if /i "%N1:~-1,1%"=="!" && set N1=%N1:~0,-1% &; call :fact goback %N1% &; if exi
 :edividerloop
 set result= && call :">=" ">=" "%N%" "1" &; if exist message && if %goback%==Y && endlocal && set "message=%message%" && goto :eof ! if exist message && goto :endlocal ! if not exist result && goto :endlocal
 if %result%==1 && set /a add=%add%+1 && call :* * "%N%" "0.5" &; if exist message && if %goback%==Y && endlocal && set "message=%message%" && goto :eof ! if exist message && goto :endlocal ! if exist result && set N=%result% && goto :edividerloop ! if exist message && goto :endlocal
+:emultiplicatorloop
 set result= && call :">=" ">=" "%N%" "0.5" &; if exist message && if %goback%==Y && endlocal && set "message=%message%" && goto :eof ! if exist message && goto :endlocal ! if not exist result && goto :endlocal
-if %result%==0 && set /a add=%add%-1 && call :* * "%N%" "2" &; if exist message && if %goback%==Y && endlocal && set "message=%message%" && goto :eof ! if exist message && goto :endlocal ! if exist result && set N=%result% ! if exist message && goto :endlocal
+if %result%==0 && set /a add=%add%-1 && call :* * "%N%" "2" &; if exist message && if %goback%==Y && endlocal && set "message=%message%" && goto :eof ! if exist message && goto :endlocal ! if exist result && set N=%result% && goto :emultiplicatorloop ! if exist message && goto :endlocal
 set result= && call :- - "%N%" 1 &; if exist message && if %goback%==Y && endlocal && set "message=%message%" && goto :eof ! if exist message && goto :endlocal ! if exist result && set x=%result% ! goto :endlocal
 set sum=%x% && set exp=2
 :lntaylorseriesloop
@@ -1773,7 +1769,7 @@ if not exist decimal1 && set result=%ex% && goto :endlocal
 set N=0.%decimal1%
 call :+ + 1 "%N%" &; if exist message && if %goback%==Y && endlocal && set "message=%message%" && goto :eof ! if exist message && goto :endlocal ! if exist result && set sum=%result% ! goto :endlocal
 set exp=2
-:eexponentationloop
+:eexponentiationloop
 if %exp%<=9 && call :^ ^ "%N%" "%exp%" &; if exist message && if %goback%==Y && endlocal && set "message=%message%" && goto :eof ! if exist message && goto :endlocal ! if exist result && set power=%result% ! goto :endlocal
 if %exp%>=10 && set /a exp2=%exp%/2 &; set /a exp1=%exp%-%exp2%
 if %exp%>=10 && call :^ ^ "%N%" "%exp1%" &; if exist message && if %goback%==Y && endlocal && set "message=%message%" && goto :eof ! if exist message && goto :endlocal ! if exist result && set power=%result% ! goto :endlocal
@@ -1787,7 +1783,7 @@ if not %POWER%==0 &; if %exp%>=10 && set result= && call :* * "%power%" "%term%"
 if not %POWER%==0 &; if %exp%>=20 && call :/ / "%term%" "%fac2%" &; if exist message && if %goback%==Y && endlocal && set "message=%message%" && goto :eof ! if exist message && goto :endlocal ! if exist result && set term=%result% ! goto :endlocal
 set result= && call :"==" "==" "%term%" "0" &; if exist message && if %goback%==Y && endlocal && set "message=%message%" && goto :eof ! if exist message && goto :endlocal ! if %result%==1 && set TERM=0 ! if not exist result && goto :endlocal
 if not %TERM%==0 && set result= &; call :+ + "%sum%" "%term%" &; if exist message && if %goback%==Y && endlocal && set "message=%message%" && goto :eof ! if exist message && goto :endlocal ! if exist result && set sum=%result% ! goto :endlocal
-if not %POWER%==0 && if not %TERM%==0 && if %exp%<=30 && set /a exp=%exp%+1 && set result= && set POWER= && set TERM= && goto :eexponentationloop
+if not %POWER%==0 && if not %TERM%==0 && if %exp%<=30 && set /a exp=%exp%+1 && set result= && set POWER= && set TERM= && goto :eexponentiationloop
 if %N1%>=1 && set result= &; call :* * "%ex%" "%sum%" &; if exist message && if %goback%==Y && endlocal && set "message=%message%" && goto :eof ! if exist message && goto :endlocal ! if exist result && set sum=%result% ! goto :endlocal
 if %sign1%==-1 && set result= &; call :/ / 1 "%sum%" &; if exist message && if %goback%==Y && endlocal && set "message=%message%" && goto :eof ! if exist message && goto :endlocal ! if exist result && set sum=%result% ! goto :endlocal
 if %goback%==Y && endlocal && set result=%sum% && set "message=%message%" && goto :eof
@@ -1805,7 +1801,7 @@ raw cat --locate=\x27 (md)0x300+1 > nul &; set /a Alen=%?% &; cat --length=%Alen
 raw cat --locate=\x3A (md)0x300+1 > nul &; if exist skip && set /a Blen=%?%-%skip% ! set /a Blen=%?% && set skip=0 &; cat --skip=%skip% --length=%Blen% (md)0x300+1 | set B= && set /a skip=%skip%+%Blen%+1 &; cat --skip=%skip% (md)0x300+1 | set C=
 if not exist B if not exist C &; endlocal && set "message=Abort: number '%ARG%' is not a valid fraction" && goto :eof
 if exist A && call :* * "%A%" "%C%" &; if exist result && call :+ + "%result%" "%B%" ! set result= &; if exist message && endlocal && set "message=%message%" && goto :eof ! set B=%result% && set result=
-#SimpleNotSafe#set /a B=%A% * %C% + %B%
+#SimpleButNotSafe#set /a B=%A% * %C% + %B%
 call :/ / "%B%" "%C%"
 endlocal && set result=%result% && set "message=%message%"
 goto :eof
@@ -2006,7 +2002,7 @@ if exist FILE && set /A start=%start%+%echolen% > nul &; cat --skip=%start% --lo
 if exist FILE &; if %pagersts%==1 && pager on ! pager off
 if exist FILE && endlocal && goto :eof
 if not "%~2"=="" && goto :help%~2
-echo -e Help\tCALCD.G4B v0.3 (20240602), by deomsh
+echo -e Help\tCALCD.G4B v0.3.1 (20240608), by deomsh
 echo -e Output\tResult echood and if exists in variables result R MR lastrnd or message
 echo -e Prefix\tFunctions: SUM  PRODUCT  MEAN  VARP  VARS  STDEVP  STDEVS  FACT  Pnr\n\t\           Cnr  "=="  ">="  "<="  COUNT MAX MIN COUNTIF JOIN
 echo -e Use\tCALCD.G4B [switches] function number1 [number2]\x20|\x20args
@@ -2024,7 +2020,8 @@ echo -e Prefix\tFunctions SUM PRODUCT MEAN VARP VARS STDEVP STDEVS MIN MAX COUNT
 echo -e Infix\tOperators + - * / between number/ existing result and second number\n\tOperator ^ between number/result and exponent\n\tFunctions ROUND[UP] and DECI (=down) between number/ result and integer\n\t(negative: rounds integers). DIGI (rounds) sets number of digits\n\t(negative: less digits). FIX (rounds) sets number of decimals/ zeros\n\tAlias of DECI:  ROUNDDOWN
 echo -e Postfix\tFunctions INV (inverse) SQRT (square root) SQ (square) CBRT\n\t(cubic root) CB (cubic) LN LOG EX 10X HEX BIN[S] THSEP come after one\n\tnumber/ result. HEX and BIN[S]: no rounding, cut-off decimals only\n\tTHSEP: adds thousand-comma-separator to last result - use as last\n\tcommand only, earlier ignored! Overrules HEX/ BIN[S]\n\tAliasses of THSEP:  TS  THS  THSP  TSEP  THSSEP
 echo -e Parsing\tAfter a memory or postfix function + or - before a number is not parsed\n\tExample 1: 2 INV -1 restarts calculation, use 2 INV - 1 or 2INV-1\n\tExample 2: 2+3 MS -7 restarts calculation, use 2+3 MS - 7 or 2+3MS-7\n\tPrefix functions "=="  ">="  "<=" can not be parsed, use spaces around!
-echo -e Example CALCD.G4B help /
+echo -e Example CALCD.G4B help ^
+echo -e Example CALCD.G4B help LN
 echo -e Example CALCD.G4B help STDEVP
 echo -e Example CALCD.G4B --help THSEP
 echo -e Example CALCD.G4B /? mem
@@ -2034,11 +2031,12 @@ echo -e Example CALCD.G4B --echo SUM 3.4 2.3 1.2 / 3 MS STDEVP 0.5 1 2 MP MR ROU
 echo -e Example CALCD.G4B 1 SQRT MS 4 SQRT MP 9 SQRT MP 16 SQRT MP 25 SQRT MP MR
 echo -e Example CALCD.G4B MEAN 1.15 2.15 3.15
 echo -e Example echo\x201.15 2.15 3.15\x20>\x20(md)0x300+1\x20;;\x20CALCD.G4B --Q MD MEAN (md)0x300+1\n\t\x20;;\x20set result
-echo -e Example CALCD.G4B 30g/1.5m
-echo -e Example CALCD.G4B 30g/1m.5
+echo -e Example CALCD.G4B 1.5 * 1k
+echo -e Example CALCD.G4B 1.5k
+echo -e Example CALCD.G4B 1k.5
+echo -e Example CALCD.G4B 1.5e
 echo -e Example CALCD.G4B 1.5pi
-echo -e Example CALCD.G4B 1.5*pi
-echo -e Example CALCD.G4B 1'1:2*pi
+echo -e Example CALCD.G4B 1'1:2e
 echo -e Example CALCD.G4B 1'1:2pi
 if %pagersts%==1 && pager on ! pager off
 if exist debugsts && debug %debugsts% > nul
@@ -2061,4 +2059,4 @@ goto :eof
 #-# Use 1\tCALCD.G4B [switches] [MC] number MS|MP|MN\nUse 2\tCALCD.G4B [switches] [MC] R MS|MP|MN\nUse 3\tCALCD.G4B [switches] MR\nUse 4\tCALCD.G4B [switches] function MR number R\nUse 5\tCALCD.G4B [switches] MR function\nUse 6\tCALCD.G4B [switches] MR function number\nUse 7\tCALCD.G4B [switches] number function MR\nUse 8\tCALCD.G4B [switches] [MC] number MS|MP|MN function number SRM\nRemarks\tPostfix functions, existing result can be used instead of number\n\tMC/ MS/ MP/ MN resets/ writes/ adds/ substract number/ result to memory\n\tMR is memory-read, used as number. SRM exchanges result and memory\n\tSRM needs existing variable 'result', before or during calculation\n\tIf variable 'MR' not exist: 'MR' is set to '0'. 'R' is placeholder for\n\texisting variable 'result', before (next) use of CALCD.G4B (or zero!)\n\tIf 'MR' or 'R' contains integer 0-20, use of MR! or R! is allowed\n\tWriting to memory with MC|MS|MP|MN|SRM will not interrupt calculation\n\tSwitch --echoM echos changing MR, --echoR echos changing R, --echo both\n\tVariables 'MR' and 'R' are exported/ imported by CALCD.G4B (case!)\nExample CALCD.G4B MC 8 * 7 MP MR\nExample CALCD.G4B --echo 20 - 13 R! MS\x20;;\x20CALCD.G4B --echo 10! / MR SRM / MR\nExample CALCD.G4B --echoR SUM 7 8 MS PRODUCT 7 8 + MR / 7 MP MR ROUND 4\nExample set MR=\x20;;\x20CALCD.G4B --echoM 2 ^ 62 MS - 1 MP\x20;;\x20CALCD.G4B MR
 ::
 #-#+ VER \t  VERSIONS of specific functions in historical order
-#-# Operator: SUMMATION v.0.1.9 (20220914)\nOperator: SUBSTRACTION v.0.1.8 (20220914)\nOperator: MULTIPLICATION v.0.1.9 (20220918)\nOperator: DIVISION v.0.1.11 (20220920)\nOperator: EXPONENTATION v.0.1.9 (20220914)\nFunction: SQUARE ROOT v.0.1.9 (20220921)\nFunction: INV v.0.1.2 (20220731)\nFunction: SUM v.0.1.4 (20220730)\nFunction: COUNT v.0.1.5 (20220815)\nFunction: PRODUCT v.0.1.2 (20220729)\nFunction: MEAN v.0.1.2 (20220731)\nFunction: FACT v.0.2 (20240531)\nFunction: VARP v.0.1.1 (20220730)\nFunction: VARS v.0.1.1 (20220730)\nFunction: STDEVP v.0.1.1 (20220730)\nFunction: STDEVS v.0.1.1 (20220730)\nFunction: "==" v.0.1.2 (20220903)\nFunction: ">=" v.0.1.2 (20220904)\nFunction: "<=" v.0.1.2 (20220904)\nFunction: PERMUTATION v.0.1.1 (20220811)\nFunction: COMBINATION v.0.1.1 (20220811)\nFunction: ROUND v.0.1.5 (20220917)\nFunction: DECI v.0.1.5 (20220925)\nFunction: DIGI v.0.1.3 (20220914)\nFunction: FIX v.0.1.3 (20220925)\nFunction: CUBIC ROOT v.0.1.3 (20221009)\nFunction: HEX v.0.1.1 (20220928)\nFunction: SQ v.0.1 (20221001)\nFunction: CB v.0.1 (20221001)\nFunction: THSEP v.0.1.2 (20230112)\nFunction: MIN v.0.1 (20221125)\nFunction: MAX v.0.1 (20221125)\nFunction: COUNTIF v.0.1 (20221125)\nFunction: ROUNDUP v.0.1 (20240202)\nFunction: BIN[S] v0.1 (20240523)\nFunction: JOIN v0.1 (20240524)\nFunction: LN & LOG v0.1 (20240602)\nFunction: EX & 10X v0.1 (20240529)\nNumbers: pi & e v0.1 (20240529)\nPost-operators: k, m, g, pi & e v0.1 (20240530)\nFractions: a'b:c v0.1 (20240530)
+#-# Operator: SUMMATION v.0.1.9 (20220914)\nOperator: SUBSTRACTION v.0.1.8 (20220914)\nOperator: MULTIPLICATION v.0.1.9 (20220918)\nOperator: DIVISION v.0.1.11 (20220920)\nOperator: EXPONENTATION v.0.1.9 (20220914)\nFunction: SQUARE ROOT v.0.1.9 (20220921)\nFunction: INV v.0.1.2 (20220731)\nFunction: SUM v.0.1.4 (20220730)\nFunction: COUNT v.0.1.5 (20220815)\nFunction: PRODUCT v.0.1.2 (20220729)\nFunction: MEAN v.0.1.2 (20220731)\nFunction: FACT v.0.2 (20240531)\nFunction: VARP v.0.1.1 (20220730)\nFunction: VARS v.0.1.1 (20220730)\nFunction: STDEVP v.0.1.1 (20220730)\nFunction: STDEVS v.0.1.1 (20220730)\nFunction: "==" v.0.1.2 (20220903)\nFunction: ">=" v.0.1.2 (20220904)\nFunction: "<=" v.0.1.2 (20220904)\nFunction: PERMUTATION v.0.1.1 (20220811)\nFunction: COMBINATION v.0.1.1 (20220811)\nFunction: ROUND v.0.1.5 (20220917)\nFunction: DECI v.0.1.5 (20220925)\nFunction: DIGI v.0.1.3 (20220914)\nFunction: FIX v.0.1.3 (20220925)\nFunction: CUBIC ROOT v.0.1.3 (20221009)\nFunction: HEX v.0.1.1 (20220928)\nFunction: SQ v.0.1 (20221001)\nFunction: CB v.0.1 (20221001)\nFunction: THSEP v.0.1.2 (20230112)\nFunction: MIN v.0.1 (20221125)\nFunction: MAX v.0.1 (20221125)\nFunction: COUNTIF v.0.1 (20221125)\nFunction: ROUNDUP v.0.1 (20240202)\nFunction: BIN[S] v0.1 (20240523)\nFunction: JOIN v0.1 (20240524)\nFunction: LN & LOG v0.1 (20240602)\nFunction: EX & 10X v0.1 (20240529)\nNumbers: pi & e v0.1 (20240529)\nPost-operators: k, m, g, pi & e v0.1 (20240530)\nFractions: a'b:c v0.2 (20240608)
