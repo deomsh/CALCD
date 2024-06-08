@@ -1,7 +1,7 @@
 # CALCD
 Grub4dos script with extensions to grub4dos' function calc
 
-CALCD.G4B v0.3 (20240602), by deomsh
+CALCD.G4B v0.3.1 (20240608), by deomsh
 
 Output  Echood, if exists in variables 'result' 'MR' 'R' 'resrnd' and 'message'
 Prefix  Functions: SUM PRODUCT MEAN VARP VARS STDEVP STDEVS FACT Pnr Cnr "==" ">=" "<=" COUNT MIN MAX COUNTIF JOIN
@@ -14,7 +14,15 @@ Memory  Functions: MS (Min), MP (M+), MN (M-), SRM (R/M), MC (clear), Placeholde
 Numbers ±10exp-18 - 2exp63-1, 0!-20!, a'b:c, e, pi, MR, R (integers hex/ bin too, decimals: dot)
 Help    CALCD.G4B help|--help|/? [function|operator|mem|ver]
 
+Using parenthes is possible with frontend PCALCD.G4B, a modification of Wonko the Sane's PCALC.G4B
+Available on: 
+
 History:
+
+v0.3.1
+Better protection in case of very long command-line
+Only natural numbers supported inside fractions
+Much higher precision of small numbers in LN, LOG and broken Powers
 
 v0.3
 New (input) number formats:
