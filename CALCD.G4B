@@ -434,6 +434,7 @@ if %N1%>=1 && set /a N1=%N1% &; set number1=%N1%%%decimal1% &; set /a num1len=%@
 if %N1%==0 && set number1=%decimal1% &; set /a num1len=%@retval%
 if %N2%>=1 && set /a N2=%N2% &; set number2=%N2%%%decimal2% &; set /a num2len=%@retval%
 if %N2%==0 && set number2=%decimal2% &; set /a num2len=%@retval%
+if %factor%>=1 && if %N1%>=1 && set /a divilen=%N1len%+%factor% &; if %divilen%>=19 && set "message=Division out of range" && goto :endlocal ! set divilen=
 if not %N2%<=922337203685477580 && set "message=Division out of range" && goto :endlocal
 set /a decidiff=%numdeci1% - %numdeci2%
 if %N1%==0 && if %decimal1:~0,1%==0 && goto :longerdivider ! if %N2%==0 && if %decimal2:~0,1%==0 && goto :longerdivider
