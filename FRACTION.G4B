@@ -1,5 +1,5 @@
 !BAT
-#-#+ FRACTION.G4B v0.2 (20240602), by deomsh
+#-#+ FRACTION.G4B v0.2.1 (20240609), by deomsh
 #-#+ Function: calculations with a'b:c fractions
 if not "%~1"=="" if not "%~1"=="/?" || goto :help
 setlocal && set *
@@ -184,7 +184,7 @@ shift
 goto :clean
 ::
 :help
-echo FRACTION.G4B v0.2 (20240602), by deomsh
+echo FRACTION.G4B v0.2.1 (20240609), by deomsh
 echo Function:   Calculations with a'b:c fractions
 echo Use:        FRACTION.G4B [--Q|--V] fraction1 operator fraction2
 echo Switch:     '--Q': quiet operation OR '--V': echos sub-results
@@ -193,10 +193,11 @@ echo -e Numbers:    \xF110exp-18 - 2exp63-1 (hex-decimal input of a, b or c allo
 echo Dependency: For operator ^ needed CALCD.G4B >=v0.3 (in same directory)
 echo Exports:    Variable 'result'/ 'message' (if error)
 echo Reduction:  Supported up to divider 9999
-echo Example 1:  3:4 * 2:3
-echo Example 2:  1'3:4 + 2:3
-echo Example 3:  1'3:4 ^ 2
-echo Example 4:  7:8/1:8
-echo Example 5:  7:8-1:8
-echo Example 6:  7:8--1:8
+echo Example 1:  FRACTION.G4B 3:4 * 2:3
+echo Example 2:  FRACTION.G4B 1'3:4 + 2:3
+echo Example 3:  FRACTION.G4B 1'3:4 ^ 2
+echo Example 4:  FRACTION.G4B 7:8/1:8
+echo Example 5:  FRACTION.G4B 7:8-1:8
+echo Example 6:  FRACTION.G4B 7:8--1:8
+echo -e Example 7:  FRACTION.G4B 1'1:9/3'1:18\x20;;\x20CALCD.G4B \x25result\x25
 goto :eof
