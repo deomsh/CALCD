@@ -86,7 +86,7 @@ First published version
 
 BONUS
 
-FRACTION.G4B v0.2 (20240602), by deomsh
+FRACTION.G4B v0.2.1 (20240609), by deomsh
 Function:   Calculations with a'b:c fractions
 Use:        FRACTION.G4B [--Q|--V] fraction1 operator fraction2
 Switch:     '--Q': quiet operation OR '--V': echos sub-results
@@ -95,12 +95,16 @@ Numbers:    ±2exp63-1 (hex-decimal input of a, b or c allowed)
 Dependency: For operator ^ needed CALCD.G4B >=v0.3 (in same directory)
 Exports:    Variable 'result'/ 'message' (if error)
 Reduction:  Supported up to divider 9999
-Example 1:  3:4 * 2:3
-Example 2:  1'3:4 + 2:3
-Example 3:  1'3:4 ^ 2
-Example 4:  7:8/1:8
-Example 5:  7:8-1:8
-Example 6:  7:8--1:8
+Example 1:  FRACTION.G4B 3:4 * 2:3
+Example 2:  FRACTION.G4B 1'3:4 + 2:3
+Example 3:  FRACTION.G4B 1'3:4 ^ 2
+Example 4:  FRACTION.G4B 7:8/1:8
+Example 5:  FRACTION.G4B 7:8-1:8
+Example 6:  FRACTION.G4B 7:8--1:8
+Example 7:  FRACTION.G4B 1'1:9/3'1:18 ;; CALCD.G4B %result%
 
+History
+v0.2.1
+Changes to smallhelp
 v0.2
 First published version
