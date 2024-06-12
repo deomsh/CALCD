@@ -1,5 +1,5 @@
 !BAT
-#-#+ CALCD.G4B v0.3.2B (20240612), by deomsh
+#-#+ CALCD.G4B v0.3.2 (20240612), by deomsh
 if "%~1"=="" && echo CALCD.G4B v0.3.2 && goto :smallhelp
 if /i "%~1"=="/?" && goto :help
 if /i "%~1"=="--help" && goto :help
@@ -544,7 +544,7 @@ if not exist N1 && if %result%==1 && set result= && call :- - "%N%.%decimals%" "
 if exist N1 && if %result%==1 && set result= && call :- - "%N%" "%number2%" &; if exist result && set remainer=%result% && set D=1 && set result= ! goto :endlocal
 if %factor1%<=-1 && set factor1=0
 set /a maxdeci=19 + %factor1%
-if not %divloops%<=%maxloops% && set /a maxloops=%maxloops% + 19 && set end=Y
+#OLD#if not %divloops%<=%maxloops% && set /a maxloops=%maxloops% + 19 && set end=Y
 goto :longerdividerloop
 :longerdividendloop2
 if %N1%>=1 && set decimals=%decimals%%0 && set comma=Y
@@ -560,7 +560,9 @@ set result=
 :longerdividerloop
 if exist remainer && call :">=" ">=" "%remainer%" "%number2%" &; if %result%==1 && set result= && call :- - "%remainer%" "%number2%" &; if exist result && set remainer=%result% && set /a D=%D% + 1 && set result= && goto :longerdividerloop ! goto :endlocal
 if %result%==0 && set sum=%sum%%%D% &; set /a sumlen=%@retval%
-if exist remainer && if not %numdeci%>=%maxdeci% && call :splitnumber "%remainer%" &; set /a divloops=%divloops% + 1 && set remainer= && goto :longerdividendloop2
+#OKE#echo "if exist remainer && if not %numdeci%>=%maxdeci% && call :splitnumber "%remainer%" &; set /a divloops=%divloops% + 1 && set remainer= &; goto :longerdividendloop2
+if exist remainer && if not %numdeci%>=%maxdeci% && call :splitnumber "%remainer%" &; set remainer= &; goto :longerdividendloop2
+#OLD#if exist remainer && if not %numdeci%>=%maxdeci% && call :splitnumber "%remainer%" &; set /a divloops=%divloops% + 1 && set remainer= && goto :longerdividendloop2
 :longerdividerend
 if not exist remainer && call :- - "%N%.%decimals%" "%number2%" &; if exist result && set remainer=%result% && set result= &; call :"==" "==" "%remainer%" "-%number2%" &; if %result%==1 && set remain=0 && set remainer= && set result= ! set remainer= && set result=
 set sum=%sum% &; set /a sumlen=%@retval% && if not exist sum && set sumlen=0
