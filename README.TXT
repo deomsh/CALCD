@@ -1,23 +1,34 @@
 # CALCD
 Grub4dos script with extensions to grub4dos' function calc
 
-CALCD.G4B v0.3.1 (20240608), by deomsh
+CALCD.G4B v0.3.2 (20240612), by deomsh
 
 Output  Echood, if exists in variables 'result' 'MR' 'R' 'resrnd' and 'message'
 Prefix  Functions: SUM PRODUCT MEAN VARP VARS STDEVP STDEVS FACT Pnr Cnr "==" ">=" "<=" COUNT MIN MAX COUNTIF JOIN
 Use     CALCD.G4B [switch] function number1 [number2]|number1 number2|args
 Infix   Operators: + - * / ^  Functions: ROUND DECI DIGI FIX
 Use     CALCD.G4B [switch] number1 operator|function number2|NUMBER
-Postfix Functions: INV SQRT SQ CBRT CB LN LOG EX 10X HEX BIN[S] THSEP|TS
+Postfix Functions: INV SQRT SQ CBRT CB LN LOG EX 10X ABS HEX BIN[S] THSEP|TS
 Use     CALCD.G4B [switch] number function
 Memory  Functions: MS (Min), MP (M+), MN (M-), SRM (R/M), MC (clear), Placeholders for number: MR R
-Numbers ±10exp-18 - 2exp63-1, 0!-20!, a'b:c, e, pi, MR, R (integers hex/ bin too, decimals: dot)
+Numbers ±10exp-18 - 2exp63-1, 0!-20!, a'b:c, en, pi, MR, R (signed 64-bit integers hex/ bin too; decimals: dot)
 Help    CALCD.G4B help|--help|/? [function|operator|mem|ver]
 
 Using parenthes is possible with frontend PCALCD.G4B, a modification of Wonko the Sane's PCALC.G4B
 Available on: http://reboot.pro/index.php?showtopic=23030#entry222994
 
 History:
+
+v0.3.2
+Help updated
+Better protection of invalid input with 'pi' and 'en'
+New: postfix function 'ABS' (Modulus: |a|)
+New: input of hexa-decimal/ binary numbers taken with minus sign if in Two's Complement format
+New: output of negative numbers with HEX/ BIN[S] in Two's Complement format (signed 64-bits only)
+Bugfix: parsing of ++/--/+-/-+ at beginning of command-line
+Bugfix: output variable R not 'good' after BIN[S]
+Bugfix: number 'e' not compatible with hexadecimal input, changed to 'en' (Eulers Number)
+Bugfix: division of two numbers with decimals only with dividend > 9 digits and divisor with more than 7 digits and more three zeros before
 
 v0.3.1
 Better protection in case of very long command-line
