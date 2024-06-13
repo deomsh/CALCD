@@ -20,7 +20,6 @@ Available on: http://reboot.pro/index.php?showtopic=23030#entry222994
 History:
 
 v0.3.2
-Bugfix: base AND exponent with decimals only gives 'Bad input'
 Help updated
 Better protection of invalid input with 'pi' and 'en'
 New: postfix function 'ABS' (Modulus: |a|)
