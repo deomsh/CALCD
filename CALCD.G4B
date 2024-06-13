@@ -1,5 +1,5 @@
 !BAT
-#-#+ CALCD.G4B v0.3.2 (20240612), by deomsh
+#-#+ CALCD.G4B v0.3.2 (20240613), by deomsh
 if "%~1"=="" && echo CALCD.G4B v0.3.2 && goto :smallhelp
 if /i "%~1"=="/?" && goto :help
 if /i "%~1"=="--help" && goto :help
@@ -1786,7 +1786,7 @@ if "%~1"=="goback" && set goback=Y && shift
 if "%~2"=="" && set "message=Abort: number is missing before '%~0'" &; if exist message && if %goback%==Y && endlocal && set "message=%message%" && goto :eof ! if exist message && goto :endlocal
 shift
 set N=%~1 && shift && set add=0 &; if /i %N:~-2,2%==mr && set N=%N:~0,-2%%%MR% && set lastrnd=%memrnd% ! if /i %N%==r && set N=%R% ! if /i %N%==-r && set N=-%R%
-if %N:~0,1%==- && set "message=Bad input: check '%N%'" && goto :endlocal
+#BAD#if %N:~0,1%==- && set "message=Bad input: check '%N%'" && goto :endlocal
 if /i "%N:~-1,1%"=="!" && set N=%N:~0,-1% &; if %N:~0,1%==- && set N=%N1:~1% && set sign=- ! set sign= &; call :fact goback %N% &; if exist result && set N=%sign%%%result% && set result= && set sign= ! set rounded= && goto :endlocal
 call :operatorsinput "%~0" "%N%" &; if exist message && if %goback%==Y && endlocal && set "message=%message%" && goto :eof ! if exist message && goto :endlocal
 shift
@@ -2043,7 +2043,7 @@ if exist FILE && set /A start=%start%+%echolen% > nul &; cat --skip=%start% --lo
 if exist FILE &; if %pagersts%==1 && pager on ! pager off
 if exist FILE && endlocal && goto :eof
 if not "%~2"=="" && goto :help%~2
-echo -e Help\tCALCD.G4B v0.3.2 (20240612), by deomsh
+echo -e Help\tCALCD.G4B v0.3.2 (20240613), by deomsh
 echo -e Output\tResult echood and if exists in variables result R MR lastrnd or message
 echo -e Prefix\tFunctions: SUM  PRODUCT  MEAN  VARP  VARS  STDEVP  STDEVS  FACT  Pnr\n\t\           Cnr  "=="  ">="  "<="  COUNT MAX MIN COUNTIF JOIN
 echo -e Use\tCALCD.G4B [switches] function number1 [number2]\x20|\x20args
