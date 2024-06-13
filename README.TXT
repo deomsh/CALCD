@@ -1,7 +1,7 @@
 # CALCD
 Grub4dos script with extensions to grub4dos' function calc
 
-CALCD.G4B v0.3.2 (20240612), by deomsh
+CALCD.G4B v0.3.2 (20240613), by deomsh
 
 Output  Echood, if exists in variables 'result' 'MR' 'R' 'resrnd' and 'message'
 Prefix  Functions: SUM PRODUCT MEAN VARP VARS STDEVP STDEVS FACT Pnr Cnr "==" ">=" "<=" COUNT MIN MAX COUNTIF JOIN
@@ -20,6 +20,7 @@ Available on: http://reboot.pro/index.php?showtopic=23030#entry222994
 History:
 
 v0.3.2
+Bugfix: base AND exponent with decimals only gives 'Bad input'
 Help updated
 Better protection of invalid input with 'pi' and 'en'
 New: postfix function 'ABS' (Modulus: |a|)
