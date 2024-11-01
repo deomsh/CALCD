@@ -1,7 +1,7 @@
 # CALCD
 Grub4dos script with extensions to grub4dos' function calc
 
-CALCD.G4B v0.3.2 (20240613), by deomsh
+CALCD.G4B v0.3.3 (20241101), by deomsh
 
 Output  Echood, if exists in variables 'result' 'MR' 'R' 'resrnd' and 'message'
 Prefix  Functions: SUM PRODUCT MEAN VARP VARS STDEVP STDEVS FACT Pnr Cnr "==" ">=" "<=" COUNT MIN MAX COUNTIF JOIN
@@ -18,6 +18,9 @@ Using parenthes is possible with frontend PCALCD.G4B, a modification of Wonko th
 Available on: http://reboot.pro/index.php?showtopic=23030#entry222994
 
 History:
+
+v0.3.3
+BUGFIX: function 'CB' (cubic) not compatible with parsing hex number on command-line, changed to 'CU'
 
 v0.3.2
 Help updated
